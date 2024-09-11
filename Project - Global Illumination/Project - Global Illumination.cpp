@@ -2,6 +2,7 @@
 //
 
 #include "Project - Global Illumination.h"
+#include <glm/glm.hpp>
 
 using namespace std;
 
