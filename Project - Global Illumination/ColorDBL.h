@@ -5,4 +5,21 @@
 
 #include <iostream>
 
+class ColorDBL {
+public:
+	//Default contructor, RGB = (0,0,0) -> Svart
+	ColorDBL() : r(0.0), g (0.0), b(0.0){};
+
+
+
+
+
+
+private:
+	//Double precision values for colors
+	double r;
+	double g;
+	double b;
+
+};
 // TODO: Reference additional headers your program requires here.
