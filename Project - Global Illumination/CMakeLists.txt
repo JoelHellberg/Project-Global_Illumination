@@ -15,6 +15,11 @@ file(GLOB SOURCES
     "Project - Global Illumination.h"
     "scene.cpp"
     "scene.h"
+    "Camera.cpp"
+    "Camera.h"
+    "ColorDBL.cpp"
+    "ColorDBL.h"
+
 )
 add_executable(CMakeTarget ${SOURCES})
 
