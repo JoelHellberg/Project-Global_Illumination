@@ -10,7 +10,13 @@ cmake_minimum_required(VERSION 3.11)
 project(CMakeTarget VERSION 1.0 LANGUAGES CXX)
 
 # Add the executable target with source files
-add_executable(CMakeTarget "Project - Global Illumination.cpp" "Project - Global Illumination.h")
+file(GLOB SOURCES
+    "Project - Global Illumination.cpp"
+    "Project - Global Illumination.h"
+    "scene.cpp"
+    "scene.h"
+)
+add_executable(CMakeTarget ${SOURCES})
 
 # Set C++ standard (CMake will handle the version check internally)
 set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)
