@@ -23,6 +23,8 @@ file(GLOB SOURCES
     "Rectangle.h"
     "Triangle.cpp"
     "Triangle.h"
+    "Ray.cpp"
+    "Ray.h"
 )
 add_executable(CMakeTarget ${SOURCES})
 
