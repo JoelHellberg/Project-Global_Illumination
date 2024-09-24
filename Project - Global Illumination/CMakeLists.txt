@@ -13,13 +13,16 @@ project(CMakeTarget VERSION 1.0 LANGUAGES CXX)
 file(GLOB SOURCES
     "Project - Global Illumination.cpp"
     "Project - Global Illumination.h"
-    "scene.cpp"
-    "scene.h"
+    "Scene.cpp"
+    "Scene.h"
     "Camera.cpp"
     "Camera.h"
     "ColorDBL.cpp"
     "ColorDBL.h"
-
+    "Rectangle.cpp"
+    "Rectangle.h"
+    "Triangle.cpp"
+    "Triangle.h"
 )
 add_executable(CMakeTarget ${SOURCES})
 

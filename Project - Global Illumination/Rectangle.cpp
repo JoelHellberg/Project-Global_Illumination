@@ -1,12 +1,5 @@
 ﻿// Project - Global Illumination.cpp : Defines the entry point for the application.
 //
 
-#include "ColorDBL.h"
+#include "Rectangle.h"
 #include <glm/glm.hpp>
-
-
-std::vector<double> ColorDBL::getColor() {
-
-    return std::vector<double> {r, b, g};
-
-}

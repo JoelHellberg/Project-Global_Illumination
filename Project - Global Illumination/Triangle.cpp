@@ -1,12 +1,15 @@
 ﻿// Project - Global Illumination.cpp : Defines the entry point for the application.
 //
 
-#include "ColorDBL.h"
+#include "Triangle.h"
 #include <glm/glm.hpp>
 
 
-std::vector<double> ColorDBL::getColor() {
 
-    return std::vector<double> {r, b, g};
+int main()
+{
+	std::cout << "Hello CMake." << std::endl;
+	return 0;
 
+	
 }

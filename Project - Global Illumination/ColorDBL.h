@@ -4,12 +4,17 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 class ColorDBL {
 public:
 	//Default contructor, RGB = (0,0,0) -> Svart
 	ColorDBL() : r(0.0), g (0.0), b(0.0){};
 
+	//Contructor to choose color
+	ColorDBL(double red, double green, double blue) : r(red), g(green), b(blue) {};
+
+	std::vector<double> getColor();
 
 
 
