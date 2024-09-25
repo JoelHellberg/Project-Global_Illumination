@@ -3,15 +3,13 @@
 
 #pragma once
 #include "Ray.cpp"
-#include <vector>
 #include <iostream>
 
 // TODO: Reference additional headers your program requires here.
 class Camera {
 public:
 	Camera(double width, double height) {
-		std::vector<std::vector<double>> vec2D(width, std::vector<double>(height, 0.0));
-		delta = 1 / (width / 2); // Funkar bara om width = height, bör ändras
+		delta = 1.0 / (width / 2.0); // Funkar bara om width = height, bör ändras
 	};
 
 	glm::vec3 GetRayDirection(double i, double j) {

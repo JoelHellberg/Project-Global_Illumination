@@ -2,11 +2,3 @@
 //
 
 #include "ColorDBL.h"
-#include <glm/glm.hpp>
-
-
-std::vector<double> ColorDBL::getColor() {
-
-    return std::vector<double> {r, b, g};
-
-}

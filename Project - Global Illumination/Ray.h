@@ -9,10 +9,11 @@
 class Ray {
 public:
 	Ray(double i, double j, double delta) {
-		pe = glm::vec3(0.0, i * delta - (delta - 1), j * delta - (delta - 1));
 		ps = glm::vec3(-1.0, 0.0, 0.0);
+		pe = glm::vec3(0.0, i * delta - (1 - delta), j * delta - (1 - delta));
 		rayDirection = pe - ps;
 	};
+
 	glm::vec3 GetRayDirection() {
 		return rayDirection;
 	}

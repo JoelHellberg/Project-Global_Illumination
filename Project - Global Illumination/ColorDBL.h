@@ -8,16 +8,22 @@
 
 class ColorDBL {
 public:
-	//Default contructor, RGB = (0,0,0) -> Svart
+	//Default contructor, RGB = (0,0,0) -> Black
 	ColorDBL() : r(0.0), g (0.0), b(0.0){};
 
 	//Contructor to choose color
 	ColorDBL(double red, double green, double blue) : r(red), g(green), b(blue) {};
 
-	std::vector<double> getColor();
+	std::vector<double> getColor() {
 
+		return std::vector<double> {r, g, b};
+	};
 
-
+	static void displayColor(std::vector<double> n){
+		
+		std::cout << "(" << n[0] << " , " << n[1] << " , " << n[2] << ")" << "\n";
+			 
+	}
 
 
 private:
