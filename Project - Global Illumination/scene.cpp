@@ -36,7 +36,11 @@ int main()
 	Rectangle wall6(glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(1.0, 0.0, 0.0));
 	rectangles.push_back(wall6);
 
-	//Triangle floorfront(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(0.0, 1.0, 0.7));
+
+	std::vector<Triangle> triangles;
+	Triangle floorfront(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(0.2, 1.0, 0.7));//Hittas
+
+	triangles.push_back(floorfront);
 
 
 	Camera myCamera = Camera(800.0, 800.0);
