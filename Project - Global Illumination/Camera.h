@@ -12,6 +12,11 @@ public:
 		delta = 1.0 / (width / 2.0); // Funkar bara om width = height, bör ändras
 	};
 
+	Ray GetRay(double i, double j) {
+		Ray dummy_ray = Ray(i, j, delta);
+		return dummy_ray;
+	}
+
 	glm::vec3 GetRayDirection(double i, double j) {
 		Ray dummy_ray = Ray(i, j, delta);
 		return dummy_ray.GetRayDirection();

@@ -24,6 +24,15 @@ public:
 	glm::vec3 GetNormal() {
 		return normal;
 	}
+	glm::vec3 GetV() {
+		return coordinates[0];
+	}
+	glm::vec3 GetC1() {
+		return coordinates[1] - coordinates[0];
+	}
+	glm::vec3 GetC2() {
+		return coordinates[3] - coordinates[0];
+	}
 	ColorDBL FetchColor() {
 		return color;
 	}
