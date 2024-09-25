@@ -2,4 +2,3 @@
 //
 
 #include "Triangle.h"
-#include <glm/glm.hpp>
