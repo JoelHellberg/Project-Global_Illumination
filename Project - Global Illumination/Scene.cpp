@@ -86,6 +86,10 @@ int main()
 	Camera myCamera = Camera(800.0, 800.0);
 	std::vector<std::vector<double>> detectedColors;
 
+	std::cout << "P3" << "\n";
+	std::cout << " 256 " << " 256 " << "\n";
+	std::cout << "255" << "\n";
+
 	for (double i = 0.0; i < 800.0; i++) {
 		for (double j = 0.0; j < 800.0; j++) {
 			Ray ray = myCamera.GetRay(i, j);
@@ -108,20 +112,20 @@ int main()
 				}
 			}
 
-			for (Triangle t : triangles) {
-				double dotProduct = glm::dot(t.GetNormal(), rayDirection);
-				if (dotProduct < 0.0) {
-					if (ray.DoesCollide(t.GetNormal(), t.GetV(), t.GetC1(), t.GetC2())) {
-						ColorDBL pixelColor = t.FetchColor();
-						colorValues = pixelColor.getColor();
+			//for (Triangle t : triangles) {
+			//	double dotProduct = glm::dot(t.GetNormal(), rayDirection);
+			//	if (dotProduct < 0.0) {
+			//		if (ray.DoesCollide(t.GetNormal(), t.GetV(), t.GetC1(), t.GetC2())) {
+			//			ColorDBL pixelColor = t.FetchColor();
+			//			colorValues = pixelColor.getColor();
 
-						intersectionPoint = ray.GetIntersectionPoint(t.GetNormal(), t.GetV());
-						// Print the color of the wall where collision was detected
-						// printColor(detectedColors, colorValues, intersectionPoint);
-						break;
-					}
-				}
-			}
+			//			intersectionPoint = ray.GetIntersectionPoint(t.GetNormal(), t.GetV());
+			//			// Print the color of the wall where collision was detected
+			//			// printColor(detectedColors, colorValues, intersectionPoint);
+			//			break;
+			//		}
+			//	}
+			//}
 
 			printColor(detectedColors, colorValues, intersectionPoint);
 		}
