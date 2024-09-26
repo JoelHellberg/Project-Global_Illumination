@@ -82,18 +82,19 @@ int main()
 	std::vector<Rectangle> rectangles = defineRectangles();
 	std::vector<Triangle> triangles = defineTriangles();
 
-	Camera myCamera = Camera(800.0, 800.0);
+	double dimensions = 800.0;
+	Camera myCamera = Camera(dimensions, dimensions);
 	std::vector<std::vector<double>> detectedColors;
 	std::vector<int> occurences;
 
 	std::cout << "P3" << "\n";
-	std::cout << " 800 " << " 800 " << "\n";
+	std::cout << " " << dimensions << " " << " " << dimensions << " " << "\n";
 	std::cout << "255" << "\n";
 	int columns = 0;
 
-	for (double i = 0.0; i < 800.0; i++) {
-		for (double j = 0.0; j < 800.0; j++) {
-			Ray ray = myCamera.GetRay(i, j);
+	for (double i = dimensions - 1.0; i >= 0.0; i--) {
+		for (double j = dimensions - 1.0; j >= 0.0; j--) {
+			Ray ray = myCamera.GetRay(j, i);
 			glm::vec3 rayDirection = ray.GetRayDirection();
 			std::vector<double> colorValues = { 0, 0, 0 };
 			glm::vec3 intersectionPoint = {0, 0, 0};
