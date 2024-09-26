@@ -44,7 +44,7 @@ std::vector<Rectangle> defineRectangles() {
 std::vector<Triangle> defineTriangles() {
 	std::vector<Triangle> triangles_out;
 
-	Triangle floorfront(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(0.4, 1.0, 0.7)); // Hittas
+	Triangle floorfront(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
 	triangles_out.push_back(floorfront);
 
 	Triangle floorbehind(glm::vec3(-3.0 , 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
@@ -53,8 +53,8 @@ std::vector<Triangle> defineTriangles() {
 	Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.2, 1.0, 0.7));
 	triangles_out.push_back(roofbehind);
 
-	Triangle rooffront(glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, 6.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
-	triangles_out.push_back(rooffront);
+	/*Triangle rooffront(glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, 6.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	triangles_out.push_back(rooffront);*/
 
 	return triangles_out;
 }
@@ -101,7 +101,7 @@ int main()
 			for (Rectangle r : rectangles) {
 				double dotProduct = glm::dot(r.GetNormal(), rayDirection);
 				if (dotProduct < 0.0) {
-					if (ray.DoesCollide(r.GetNormal(), r.GetV(), r.GetC1(), r.GetC2())) {
+					if (ray.DoesCollideRectangle(r.GetNormal(), r.GetV(), r.GetC1(), r.GetC2())) {
 						ColorDBL pixelColor = r.FetchColor();
 						colorValues = pixelColor.getColor();
 
@@ -111,20 +111,20 @@ int main()
 				}
 			}
 
-			//for (Triangle t : triangles) {
-			//	double dotProduct = glm::dot(t.GetNormal(), rayDirection);
-			//	if (dotProduct < 0.0) {
-			//		if (ray.DoesCollide(t.GetNormal(), t.GetV(), t.GetC1(), t.GetC2())) {
-			//			ColorDBL pixelColor = t.FetchColor();
-			//			colorValues = pixelColor.getColor();
+			for (Triangle t : triangles) {
+				double dotProduct = glm::dot(t.GetNormal(), rayDirection);
+				if (dotProduct < 0.0) {
+					if (ray.DoesCollideTriangle(t.GetNormal(), t.GetV(), t.GetC1(), t.GetC2())) {
+						ColorDBL pixelColor = t.FetchColor();
+						colorValues = pixelColor.getColor();
 
-			//			intersectionPoint = ray.GetIntersectionPoint(t.GetNormal(), t.GetV());
-			//			// Print the color of the wall where collision was detected
-			//			// printColor(detectedColors, colorValues, intersectionPoint);
-			//			break;
-			//		}
-			//	}
-			//}
+						intersectionPoint = ray.GetIntersectionPoint(t.GetNormal(), t.GetV());
+						// Print the color of the wall where collision was detected
+						// printColor(detectedColors, colorValues, intersectionPoint);
+						break;
+					}
+				}
+			}
 
 			// Print the color of the wall where collision was detected
 			printColor(detectedColors, colorValues, occurences);

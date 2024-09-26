@@ -34,7 +34,7 @@ public:
 		float t = CalculateT(surfaceNormal_in, v_in);
 		return ps + t * rayDirection;
 	}
-	bool DoesCollide(glm::vec3 surfaceNormal_in, glm::vec3 v_in, glm::vec3 c1, glm::vec3 c2) {
+	bool DoesCollideRectangle(glm::vec3 surfaceNormal_in, glm::vec3 v_in, glm::vec3 c1, glm::vec3 c2) {
 		glm::vec3 xi = GetIntersectionPoint(surfaceNormal_in, v_in);
 		double a = glm::dot((xi - v_in), c1) / glm::dot(c1, c1);
 		double b = glm::dot((xi - v_in), c2) / glm::dot(c2, c2);
@@ -42,6 +42,14 @@ public:
 		return (0 <= a && a <= 1) && (0 <= b && b <= 1);
 
 	}
+
+	bool DoesCollideTriangle(glm::vec3 surfaceNormal_in, glm::vec3 v_in, glm::vec3 c1, glm::vec3 c2) {
+		glm::vec3 xi = GetIntersectionPoint(surfaceNormal_in, v_in);
+		double a = glm::dot((xi - v_in), c1) / glm::dot(c1, c1);
+		double b = glm::dot((xi - v_in), c2) / glm::dot(c2, c2);
+		return (a >= 0 && b>=0) && (a+b<=1);
+	}
+
 private:
 	glm::vec3 pe; // Position of the specific Pixel
 	glm::vec3 ps; // Position of the eye

@@ -11,12 +11,12 @@
 class Triangle {
 public:
     Triangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, ColorDBL color_in) {
-        coordinates.push_back(point1);
-        coordinates.push_back(point2);
-        coordinates.push_back(point3);
+        coordinates.push_back(point1); //Coordniates[0]
+        coordinates.push_back(point2);//Coordinates[1]
+        coordinates.push_back(point3);//Cordinates[2]
         color = color_in;
 
-        normal = glm::cross((point3 - point1), (point2 - point1));
+        normal = glm::cross((point1 - point3), (point2 - point1));
     };
 
     glm::vec3 GetNormal() {
@@ -30,7 +30,7 @@ public:
         return coordinates[1] - coordinates[0];
     }
     glm::vec3 GetC2() {
-        return coordinates[2] - coordinates[0];
+        return coordinates[2] - coordinates[1];
     }
 
     ColorDBL FetchColor() {
