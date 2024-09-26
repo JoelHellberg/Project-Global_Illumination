@@ -21,9 +21,9 @@ public:
 
 	static void displayColor(std::vector<double> n){
 
-	
-		
-		std::cout  << n[0]*255 << " " << n[1]*255 << " " << n[2]*255 << "\n";
+		std::cout << n[0] * 255.0 << " " << n[1] * 255.0 << " " << n[2] * 255.0 << "\n";
+
+		// std::cout << n[0] << " " << n[1] << " " << n[2] << "\n";
 		
 			 
 	}

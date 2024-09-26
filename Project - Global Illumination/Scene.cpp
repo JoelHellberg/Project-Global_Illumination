@@ -59,22 +59,21 @@ std::vector<Triangle> defineTriangles() {
 	return triangles_out;
 }
 
-void printColor(std::vector<std::vector<double>>& detectedColors_in, std::vector<double> colorValues_in, glm::vec3 intersectionPoint) {
-	/*bool isUnique = true;
-	for (std::vector<double> c : detectedColors_in) {
-		if (colorValues_in == c) {
-			isUnique = false;
-		}
-	}
-	if (isUnique) {
-		ColorDBL::displayColor(colorValues_in);
-		detectedColors_in.push_back(colorValues_in);
+void printColor(std::vector<std::vector<double>>& detectedColors_in, std::vector<double> colorValues_in, std::vector<int>& occurences_in) {
+	//bool isUnique = true;
 
-		std::string printPosition = "(" + std::to_string(intersectionPoint.x) + ", "
-			+ std::to_string(intersectionPoint.y) + ", "
-			+ std::to_string(intersectionPoint.z) + ")";
-		std::cout << "Intersection point is: " << printPosition << "\n";
-	}*/
+	//for (int i = 0; i < detectedColors_in.size(); i++) {
+	//	if (colorValues_in == detectedColors_in[i]) {
+	//		occurences_in[i] = occurences_in[i] + 1;
+	//		isUnique = false;
+	//	}
+	//}
+
+	//if (isUnique) {
+	//	// ColorDBL::displayColor(colorValues_in);
+	//	detectedColors_in.push_back(colorValues_in);
+	//	occurences_in.push_back(1);
+	//}
 	ColorDBL::displayColor(colorValues_in);
 }
 
@@ -85,10 +84,12 @@ int main()
 
 	Camera myCamera = Camera(800.0, 800.0);
 	std::vector<std::vector<double>> detectedColors;
+	std::vector<int> occurences;
 
 	std::cout << "P3" << "\n";
-	std::cout << " 256 " << " 256 " << "\n";
+	std::cout << " 800 " << " 800 " << "\n";
 	std::cout << "255" << "\n";
+	int columns = 0;
 
 	for (double i = 0.0; i < 800.0; i++) {
 		for (double j = 0.0; j < 800.0; j++) {
@@ -105,8 +106,6 @@ int main()
 						colorValues = pixelColor.getColor();
 
 						intersectionPoint = ray.GetIntersectionPoint(r.GetNormal(), r.GetV());
-						// Print the color of the wall where collision was detected
-						// printColor(detectedColors, colorValues, intersectionPoint);
 						break;
 					}
 				}
@@ -127,9 +126,15 @@ int main()
 			//	}
 			//}
 
-			printColor(detectedColors, colorValues, intersectionPoint);
+			// Print the color of the wall where collision was detected
+			printColor(detectedColors, colorValues, occurences);
 		}
 	}
+
+	/*for (int i = 0; i < detectedColors.size(); i++) {
+		ColorDBL::displayColor(detectedColors[i]);
+		std::cout << "number of occurences: " << occurences[i] << "\n\n";
+	}*/
 
 	return 0;
 
