@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ColorDBL.h"
+#include "Ray.h"
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
@@ -23,24 +24,16 @@ public:
         return normal;
     }
 
-    glm::vec3 GetV() {
-        return coordinates[0];
-    }
-    glm::vec3 GetC1() {
-
-        return coordinates[0] - coordinates[2];
-    }
-    glm::vec3 GetC2() {
-        return coordinates[1] - coordinates[0];
-    }
-
-    std::vector <glm::vec3>  GetCoordinates() {
-        return coordinates;
-    }
-
     ColorDBL FetchColor() {
         return color;
     }
+
+    double CalculateT(glm::vec3 rayDirection);
+
+    glm::vec3 GetIntersectionPoint(Ray ray_in);
+
+    bool DoesCollide(Ray ray_in);
+
 private:
     std::vector <glm::vec3> coordinates;
     ColorDBL color;

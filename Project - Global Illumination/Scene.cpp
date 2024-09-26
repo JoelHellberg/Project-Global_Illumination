@@ -2,12 +2,13 @@
 //
 
 #include "Scene.h"
-#include "Rectangle.cpp"
-#include "ColorDBL.cpp"
+
 #include "ColorDBL.h"
-#include "Camera.cpp"
-#include "Triangle.cpp"
-#include "Ray.cpp"
+#include "Rectangle.h"
+#include "Triangle.h"
+#include "Camera.h"
+#include "Ray.h"
+
 #include <glm/glm.hpp>
 #include <vector>
 #include <string>
@@ -98,32 +99,32 @@ int main()
 
 	for (double i = dimensions - 1.0; i >= 0.0; i--) {
 		for (double j = dimensions - 1.0; j >= 0.0; j--) {
+
 			Ray ray = myCamera.GetRay(j, i);
-			glm::vec3 rayDirection = ray.GetRayDirection();
 			std::vector<double> colorValues = { 0, 0, 0 };
 			glm::vec3 intersectionPoint = {0, 0, 0};
 
 			for (Rectangle rectangle : rectangles) {
-				double dotProduct = glm::dot(rectangle.GetNormal(), rayDirection);
+				double dotProduct = glm::dot(rectangle.GetNormal(), ray.GetRayDirection());
 				if (dotProduct < 0.0) {
-					if (ray.DoesCollideRectangle(rectangle.GetNormal(), rectangle.GetV(), rectangle.GetC1(), rectangle.GetC2())) {
+					if (rectangle.DoesCollide(ray)) {
 						ColorDBL pixelColor = rectangle.FetchColor();
 						colorValues = pixelColor.getColor();
 
-						intersectionPoint = ray.GetIntersectionPointRectangle(rectangle);
+						intersectionPoint = rectangle.GetIntersectionPoint(ray);
 						break;
 					}
 				}
 			}
 
 			for (Triangle triangle : triangles) {
-				double dotProduct = glm::dot(triangle.GetNormal(), rayDirection);
+				double dotProduct = glm::dot(triangle.GetNormal(), ray.GetRayDirection());
 				if (dotProduct < 0.0) {
-					if (ray.DoesCollideTriangle(triangle)) {
+					if (triangle.DoesCollide(ray)) {
 						ColorDBL pixelColor = triangle.FetchColor();
 						colorValues = pixelColor.getColor();
 
-						intersectionPoint = ray.GetIntersectionPointTriangle(triangle);
+						intersectionPoint = triangle.GetIntersectionPoint(ray);
 						break;
 					}
 				}
