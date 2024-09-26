@@ -44,17 +44,21 @@ std::vector<Rectangle> defineRectangles() {
 std::vector<Triangle> defineTriangles() {
 	std::vector<Triangle> triangles_out;
 
-	Triangle floorfront(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
-	triangles_out.push_back(floorfront);
+	//Triangle floorfront1(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
+	//triangles_out.push_back(floorfront1);
+	//Triangle floorfront2(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
+	//triangles_out.push_back(floorfront2);
 
-	Triangle floorbehind(glm::vec3(-3.0 , 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
-	triangles_out.push_back(floorbehind);
+	/*Triangle floorbehind(glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
+	triangles_out.push_back(floorbehind);*/
 
-	Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.2, 1.0, 0.7));
-	triangles_out.push_back(roofbehind);
+	/*Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
+	triangles_out.push_back(roofbehind);*/
 
-	/*Triangle rooffront(glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, 6.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
-	triangles_out.push_back(rooffront);*/
+	Triangle rooffront1(glm::vec3(10.0, 0.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	triangles_out.push_back(rooffront1);
+	Triangle rooffront2(glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	triangles_out.push_back(rooffront2);
 
 	return triangles_out;
 }
@@ -99,29 +103,27 @@ int main()
 			std::vector<double> colorValues = { 0, 0, 0 };
 			glm::vec3 intersectionPoint = {0, 0, 0};
 
-			for (Rectangle r : rectangles) {
-				double dotProduct = glm::dot(r.GetNormal(), rayDirection);
+			for (Rectangle rectangle : rectangles) {
+				double dotProduct = glm::dot(rectangle.GetNormal(), rayDirection);
 				if (dotProduct < 0.0) {
-					if (ray.DoesCollideRectangle(r.GetNormal(), r.GetV(), r.GetC1(), r.GetC2())) {
-						ColorDBL pixelColor = r.FetchColor();
+					if (ray.DoesCollideRectangle(rectangle.GetNormal(), rectangle.GetV(), rectangle.GetC1(), rectangle.GetC2())) {
+						ColorDBL pixelColor = rectangle.FetchColor();
 						colorValues = pixelColor.getColor();
 
-						intersectionPoint = ray.GetIntersectionPoint(r.GetNormal(), r.GetV());
+						intersectionPoint = ray.GetIntersectionPointRectangle(rectangle);
 						break;
 					}
 				}
 			}
 
-			for (Triangle t : triangles) {
-				double dotProduct = glm::dot(t.GetNormal(), rayDirection);
+			for (Triangle triangle : triangles) {
+				double dotProduct = glm::dot(triangle.GetNormal(), rayDirection);
 				if (dotProduct < 0.0) {
-					if (ray.DoesCollideTriangle(t.GetNormal(), t.GetV(), t.GetC1(), t.GetC2())) {
-						ColorDBL pixelColor = t.FetchColor();
+					if (ray.DoesCollideTriangle(triangle)) {
+						ColorDBL pixelColor = triangle.FetchColor();
 						colorValues = pixelColor.getColor();
 
-						intersectionPoint = ray.GetIntersectionPoint(t.GetNormal(), t.GetV());
-						// Print the color of the wall where collision was detected
-						// printColor(detectedColors, colorValues, intersectionPoint);
+						intersectionPoint = ray.GetIntersectionPointTriangle(triangle);
 						break;
 					}
 				}

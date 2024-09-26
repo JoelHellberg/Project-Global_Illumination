@@ -27,10 +27,15 @@ public:
         return coordinates[0];
     }
     glm::vec3 GetC1() {
-        return coordinates[1] - coordinates[0];
+
+        return coordinates[0] - coordinates[2];
     }
     glm::vec3 GetC2() {
-        return coordinates[2] - coordinates[1];
+        return coordinates[1] - coordinates[0];
+    }
+
+    std::vector <glm::vec3>  GetCoordinates() {
+        return coordinates;
     }
 
     ColorDBL FetchColor() {
