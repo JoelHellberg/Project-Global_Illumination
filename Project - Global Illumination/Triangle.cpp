@@ -30,8 +30,11 @@ glm::vec3 Triangle::GetIntersectionPoint(Ray ray_in) {
 
 bool Triangle::DoesCollide(Ray ray_in) {
     glm::vec3 v = coordinates[0];
-    glm::vec3 c1 = coordinates[0] - coordinates[2];
+    glm::vec3 c1 = coordinates[2] - coordinates[0];
     glm::vec3 c2 = coordinates[1] - coordinates[0];
+
+    //std::cout << "C1 = " << c1.x << " " << c1.y << " " << c1.z;
+    //std::cout << "C2 = " << c2.x << " " << c2.y << " " << c2.z;
 
     float t = CalculateT(ray_in);
 
