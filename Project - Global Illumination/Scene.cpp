@@ -17,24 +17,24 @@ std::vector<Rectangle> defineRectangles() {
 	// Define objects
 	std::vector<Rectangle> rectangles_out;
 
-	// Define Roof & Floor
-	Rectangle roof(glm::vec3(0.0, 6.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(1.0, 0.7, 0.0)); // Hittas
+	 //Define Roof & Floor
+	Rectangle roof(glm::vec3(0.0, 6.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.5, 0.5, 0.5)); // Hittas
 	rectangles_out.push_back(roof);
-	Rectangle floor(glm::vec3(0.0, 6.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), glm::vec3(10.0, 6.0, -5.0), ColorDBL(0.0, 1.0, 0.0)); // Hittas
+	Rectangle floor(glm::vec3(0.0, 6.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), glm::vec3(10.0, 6.0, -5.0), ColorDBL(0.5, 0.5, 0.5)); // Hittas
 	rectangles_out.push_back(floor);
 
 	// Walls behind y (x, -6.0, z)
 	Rectangle wall1(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, -6.0, 5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(-3.0, 0.0, -5.0), ColorDBL(0.0, 0.0, 1.0));
 	rectangles_out.push_back(wall1);
-	Rectangle wall2(glm::vec3(0.0, -6.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, -6.0, -5.0), glm::vec3(0.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 1.0)); // Hittas
+	Rectangle wall2(glm::vec3(0.0, -6.0, 5.0), glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, -6.0, -5.0), glm::vec3(0.0, -6.0, -5.0), ColorDBL(0.0, 1.0, 0.0)); // Hittas
 	rectangles_out.push_back(wall2);
-	Rectangle wall3(glm::vec3(10.0, -6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(0.7, 0.7, 0.7)); // Hittas
+	Rectangle wall3(glm::vec3(10.0, -6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1, 0.0, 0.0)); // Hittas
 	rectangles_out.push_back(wall3);
 
 	// Walls infront of y (x, 6.0, z)
 	Rectangle wall4(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, 6.0, -5.0), glm::vec3(0.0, 6.0, 5.0), ColorDBL(0.0, 1.0, 0.7));
 	rectangles_out.push_back(wall4);
-	Rectangle wall5(glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, 6.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, 6.0, 5.0), ColorDBL(0.5, 0.5, 0.5)); // Hittas men inte först
+	Rectangle wall5(glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, 6.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, 6.0, 5.0), ColorDBL(0.0, 0.0, 1.0)); // Hittas men inte först
 	rectangles_out.push_back(wall5);
 	Rectangle wall6(glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(1.0, 0.0, 0.0)); // Hittas men inte först
 	rectangles_out.push_back(wall6);
@@ -45,20 +45,28 @@ std::vector<Rectangle> defineRectangles() {
 std::vector<Triangle> defineTriangles() {
 	std::vector<Triangle> triangles_out;
 
-	// Triangle floorfront1(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
-	// triangles_out.push_back(floorfront1);
-	// Triangle floorfront2(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
-	// triangles_out.push_back(floorfront2);
+	// Define the floor (in front of the camera) as two orthogonal triangles
+	Triangle floorFrontL(glm::vec3(10.0, 0.0, -5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), ColorDBL(0.5, 0.5, 0.5));
+	triangles_out.push_back(floorFrontL);
+	Triangle floorFrontR(glm::vec3(10.0, 0.0, -5.0), glm::vec3(10.0, -6.0, -5.0), glm::vec3(13.0, 0.0, -5.0), ColorDBL(0.5, 0.5, 0.5)); 
+	triangles_out.push_back(floorFrontR);
 
-	// Triangle floorbehind(glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
-	// triangles_out.push_back(floorbehind);
+	// Define the floor (behind the camera) as two orthogonal triangles
+	Triangle floorBehindL(glm::vec3(0.0, 0.0, -5.0), glm::vec3(0.0, 6.0, -5.0), glm::vec3(-3.0, 0.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
+	triangles_out.push_back(floorBehindL);
+	Triangle floorBehindR(glm::vec3(0.0, 0.0, -5.0), glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
+	triangles_out.push_back(floorBehindR);
 
-	// Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
-	// triangles_out.push_back(roofbehind);
+	// Define the roof (behind the camera) as two orthogonal triangles
+	Triangle roofBehindL(glm::vec3(0.0, 0.0, 5.0), glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
+	triangles_out.push_back(roofBehindL);
+	Triangle roofBehindR(glm::vec3(0.0, 0.0, 5.0), glm::vec3(0.0, -6.0, 5.0), glm::vec3(-3.0, 0.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
+	triangles_out.push_back(roofBehindR);
 
-	Triangle roofFrontL(glm::vec3(10.0, 0.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	// Define the roof (in front of the camera) as two orthogonal triangles
+	Triangle roofFrontL(glm::vec3(10.0, 0.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.5, 0.5, 0.5));
 	triangles_out.push_back(roofFrontL);
-	Triangle roofFrontR(glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	Triangle roofFrontR(glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), ColorDBL(0.5, 0.5, 0.5));
 	triangles_out.push_back(roofFrontR);
 
 	return triangles_out;
