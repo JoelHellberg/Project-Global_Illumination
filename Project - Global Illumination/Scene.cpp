@@ -45,21 +45,21 @@ std::vector<Rectangle> defineRectangles() {
 std::vector<Triangle> defineTriangles() {
 	std::vector<Triangle> triangles_out;
 
-	//Triangle floorfront1(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
-	//triangles_out.push_back(floorfront1);
-	//Triangle floorfront2(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
-	//triangles_out.push_back(floorfront2);
+	// Triangle floorfront1(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
+	// triangles_out.push_back(floorfront1);
+	// Triangle floorfront2(glm::vec3(13.0, 0.0, -5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(10.0, -6.0, -5.0), ColorDBL(1.0, 1.0, 0.0)); // Hittas
+	// triangles_out.push_back(floorfront2);
 
-	/*Triangle floorbehind(glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
-	triangles_out.push_back(floorbehind);*/
+	// Triangle floorbehind(glm::vec3(-3.0, 0.0, -5.0), glm::vec3(0.0, -6.0, -5.0), glm::vec3(0.0, 6.0, -5.0), ColorDBL(0.3, 1.0, 0.7));
+	// triangles_out.push_back(floorbehind);
 
-	/*Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
-	triangles_out.push_back(roofbehind);*/
+	// Triangle roofbehind(glm::vec3(-3.0, 0.0, 5.0), glm::vec3(0.0, 6.0, 5.0), glm::vec3(0.0, -6.0, 5.0), ColorDBL(0.0, 8.0, 0.0));
+	// triangles_out.push_back(roofbehind);
 
-	Triangle rooffront1(glm::vec3(10.0, 0.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
-	triangles_out.push_back(rooffront1);
-	Triangle rooffront2(glm::vec3(10.0, -6.0, 5.0), glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
-	triangles_out.push_back(rooffront2);
+	Triangle roofFrontL(glm::vec3(10.0, 0.0, 5.0), glm::vec3(10.0, 6.0, 5.0), glm::vec3(13.0, 0.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	triangles_out.push_back(roofFrontL);
+	Triangle roofFrontR(glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), ColorDBL(0.1, 1.0, 0.7));
+	triangles_out.push_back(roofFrontR);
 
 	return triangles_out;
 }
