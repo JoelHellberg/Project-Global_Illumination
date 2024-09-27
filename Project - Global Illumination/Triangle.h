@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Material.h"
 #include "ColorDBL.h"
 #include "Ray.h"
 #include <glm/glm.hpp>
@@ -11,13 +12,13 @@
 
 class Triangle {
 public:
-    Triangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, ColorDBL color_in) {
+    Triangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, Material mat) {
         coordinates.push_back(point1); //Coordniates[0]
         coordinates.push_back(point2); //Coordinates[1]
         coordinates.push_back(point3); //Cordinates[2]
-        color = color_in;
+        triangleMat = mat;
 
-        normal = glm::cross((point1 - point3), (point2 - point1));
+        normal = glm::normalize( glm::cross((point1 - point3), (point2 - point1)) );
     };
 
     glm::vec3 GetNormal() {
@@ -25,8 +26,12 @@ public:
     }
 
     ColorDBL FetchColor() {
-        return color;
+        return triangleMat.getColor();
     }
+
+	Material GetMaterial() {
+		return triangleMat;
+	}
 
     double CalculateT(Ray ray);
 
@@ -36,6 +41,6 @@ public:
 
 private:
     std::vector <glm::vec3> coordinates;
-    ColorDBL color;
+    Material triangleMat;
     glm::vec3 normal;
 };

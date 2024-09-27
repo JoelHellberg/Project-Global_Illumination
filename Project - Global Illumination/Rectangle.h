@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Material.h"
 #include "ColorDBL.h"
 #include "Ray.h"
 
@@ -15,15 +16,15 @@
 class Rectangle {
 public:
 
-	Rectangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, ColorDBL color_in) {
+	Rectangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
 		coordinates.push_back(point1);
 		coordinates.push_back(point2);
 		coordinates.push_back(point3);
 		coordinates.push_back(point4);
-		color = color_in;
+		rectangleMaterial = mat;
 
 		//normal = glm::normalize(glm::cross((point2 - point1), (point3 - point1)));
-		normal = glm::cross((point4 - point3), (point1 - point4));
+		normal = glm::normalize( glm::cross((point4 - point3), (point1 - point4)));
 	};
 
 	glm::vec3 GetNormal() {
@@ -31,7 +32,11 @@ public:
 	}
 
 	ColorDBL FetchColor() {
-		return color;
+		return rectangleMaterial.getColor();
+	}
+
+	Material GetMaterial() {
+		return rectangleMaterial;
 	}
 
 	double CalculateT(glm::vec3 rayDirection);
@@ -43,7 +48,7 @@ public:
 	private:
 
 		std::vector <glm::vec3> coordinates;
-		ColorDBL color;
+		Material rectangleMaterial;
 		glm::vec3 normal;
 };
 
