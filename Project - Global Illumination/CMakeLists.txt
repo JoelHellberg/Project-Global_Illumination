@@ -11,11 +11,8 @@ project(CMakeTarget VERSION 1.0 LANGUAGES CXX)
 
 # Add the executable target with source files
 file(GLOB SOURCES
-    "Project - Global Illumination.cpp"
-    "Project - Global Illumination.h"
     "Scene.cpp"
     "Scene.h"
-    "Camera.cpp"
     "Camera.h"
     "ColorDBL.cpp"
     "ColorDBL.h"
@@ -25,7 +22,6 @@ file(GLOB SOURCES
     "Triangle.h"
     "Ray.cpp"
     "Ray.h"
-    "Material.cpp"
     "Material.h"
     "CollisionHandler.cpp"
     "CollisionHandler.h"

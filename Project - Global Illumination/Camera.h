@@ -22,7 +22,5 @@ public:
 		return dummy_ray.GetRayDirection();
 	}
 private:
-	glm::vec3 eye = glm::vec3(-1.0, 0.0, 0.0);
-	glm::vec3 cameraCenter = glm::vec3(0.0, 0.0, 0.0);
 	double delta;
 };
