@@ -25,7 +25,7 @@ public:
 		rayDirection = glm::normalize(do_in);
 	}
 
-	Ray reflection(glm::vec3 di, glm::vec3 N, Material mat, glm::vec3 intersectionPoint);
+	Ray reflection(glm::vec3 di, glm::vec3 N, glm::vec3 intersectionPoint);
 
 	void reflect(glm::vec3 di, glm::vec3 N, Material mat, glm::vec3 intersectionPoint);
 

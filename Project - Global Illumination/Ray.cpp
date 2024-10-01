@@ -12,7 +12,7 @@
 
 // do  = di - 2(di*N)*N
 
-Ray Ray::reflection(glm::vec3 di, glm::vec3 surface_normal, Material mat, glm::vec3 intersectionPoint) {
+Ray Ray::reflection(glm::vec3 di, glm::vec3 surface_normal, glm::vec3 intersectionPoint) {
 	surface_normal = glm::normalize(surface_normal);
 	di = glm::normalize(di);
 
@@ -24,7 +24,7 @@ Ray Ray::reflection(glm::vec3 di, glm::vec3 surface_normal, Material mat, glm::v
 
 
 	Ray reflected_ray = Ray(d_o, intersectionPoint);
-	Material new_mat = mat;
+	// Material new_mat = mat;
 
 	return reflected_ray;
 

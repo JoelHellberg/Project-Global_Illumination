@@ -11,33 +11,40 @@
 
 class CollisionHandler {
 public:
-	//Default contructor, RGB = (0,0,0) -> Black
-
-	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray) {
+	// Function that returns the material the shape a ray collides with
+	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in) {
 		bool shapeDetected = false;
 		glm::vec3 intersectionPoint = { 0, 0, 0 };
 		glm::vec3 normal = { 0, 0, 0 };
 		Material mat = Material();
 
+		// Find the specific object ("shape") that the ray collides with
 		for (Shape* shape : shapes_in) {
-			double dotProduct = glm::dot(shape->GetNormal(), ray.GetRayDirection());
+			double dotProduct = glm::dot(shape->GetNormal(), ray_in.GetRayDirection());
 			if (dotProduct < 0.0) {
-				if (shape->DoesCollide(ray)) {
+				if (shape->DoesCollide(ray_in)) {
 					mat = shape->GetMaterial();
 					normal = shape->GetNormal();
-					intersectionPoint = shape->GetIntersectionPoint(ray);
+					intersectionPoint = shape->GetIntersectionPoint(ray_in);
 					shapeDetected = true;
 					break;
 				}
 			}
 		}
 
+		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
-			ray = ray.reflection(ray.GetRayDirection(), normal, mat, intersectionPoint);
-			mat = GetCollidingMaterial(shapes_in, ray);
+			mat = GetMirrorMaterial(shapes_in, ray_in, normal, intersectionPoint);
 		}
+
 		return mat;
 	}
-
+private:
+	// Function that returns the material of a ray within a mirror
+	static Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in) {
+		Ray ray = ray.reflection(ray_in.GetRayDirection(), normal_in, intersectionPoint_in);
+		Material mat = GetCollidingMaterial(shapes_in, ray);
+		return mat;
+	}
 };
 // TODO: Reference additional headers your program requires here.

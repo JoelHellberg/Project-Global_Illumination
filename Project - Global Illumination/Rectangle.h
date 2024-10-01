@@ -40,16 +40,15 @@ public:
 		return rectangleMaterial;
 	}
 
-	double CalculateT(Ray ray_in) const override;
-
 	glm::vec3 GetIntersectionPoint(Ray ray_in) const override;
 
 	bool DoesCollide(Ray ray_in) const override;
 
 	private:
-
 		std::vector <glm::vec3> coordinates;
 		Material rectangleMaterial;
 		glm::vec3 normal;
+
+		double CalculateT(Ray ray_in) const;
 };
 

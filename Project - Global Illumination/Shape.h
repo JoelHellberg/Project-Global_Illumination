@@ -16,8 +16,6 @@ public:
 
 	virtual Material GetMaterial() const = 0;
 
-	virtual double CalculateT(Ray ray_in) const = 0;
-
 	virtual glm::vec3 GetIntersectionPoint(Ray ray_in) const = 0;
 
 	virtual bool DoesCollide(Ray ray_in) const = 0;
