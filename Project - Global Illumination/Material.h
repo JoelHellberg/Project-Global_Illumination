@@ -14,11 +14,11 @@ public:
 
 	Material(ColorDBL color_in, bool isReflective_in) : color(color_in), isReflective(isReflective_in){};
 
-	ColorDBL getColor() {
+	ColorDBL getColor() const {
 		return color;
 	};
 
-	bool checkIsReflective() {
+	bool checkIsReflective() const {
 		return isReflective;
 	};
 

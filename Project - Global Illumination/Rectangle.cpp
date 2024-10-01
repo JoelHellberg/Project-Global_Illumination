@@ -3,7 +3,7 @@
 
 #include "Rectangle.h"
 
-double Rectangle::CalculateT(glm::vec3 rayDirection) {
+double Rectangle::CalculateT(Ray ray_in) const {
 	// s: starting point (ps)
 	// N: Normal of surface
 	// D: direction of ray from eye
@@ -12,22 +12,22 @@ double Rectangle::CalculateT(glm::vec3 rayDirection) {
 	glm::vec3 v = coordinates[0];
 	glm::vec3 s = glm::vec3(-1.0, 0.0, 0.0);
 	glm::vec3 N = normal;
-	glm::vec3 d = rayDirection;
+	glm::vec3 d = ray_in.GetRayDirection();
 
 	double t = glm::dot((v - s), N) / glm::dot(d, N);
 	return t;
 }
 
-glm::vec3 Rectangle::GetIntersectionPoint(Ray ray_in) {
+glm::vec3 Rectangle::GetIntersectionPoint(Ray ray_in) const {
 	glm::vec3 rayDirection = ray_in.GetRayDirection();
 	glm::vec3 ps = ray_in.GetPs();
-	float t = CalculateT(rayDirection);
+	float t = CalculateT(ray_in);
 
 	return ps + t * rayDirection;
 }
 
-bool Rectangle::DoesCollide(Ray ray_in) {
-	float t = CalculateT(ray_in.GetRayDirection());
+bool Rectangle::DoesCollide(Ray ray_in) const {
+	float t = CalculateT(ray_in);
 	glm::vec3 xi = GetIntersectionPoint(ray_in);
 	glm::vec3 v = coordinates[0];
 	glm::vec3 c1 = coordinates[1] - coordinates[0];

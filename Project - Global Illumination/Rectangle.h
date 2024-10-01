@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Shape.h"
 #include "Material.h"
 #include "ColorDBL.h"
 #include "Ray.h"
@@ -13,7 +14,7 @@
 
 // TODO: Reference additional headers your program requires here.
 
-class Rectangle {
+class Rectangle : public Shape {
 public:
 
 	Rectangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
@@ -27,23 +28,23 @@ public:
 		normal = glm::normalize( glm::cross((point4 - point3), (point1 - point4)));
 	};
 
-	glm::vec3 GetNormal() {
+	glm::vec3 GetNormal() const override {
 		return normal;
 	}
 
-	ColorDBL FetchColor() {
+	ColorDBL FetchColor() const override {
 		return rectangleMaterial.getColor();
 	}
 
-	Material GetMaterial() {
+	Material GetMaterial() const override {
 		return rectangleMaterial;
 	}
 
-	double CalculateT(glm::vec3 rayDirection);
+	double CalculateT(Ray ray_in) const override;
 
-	glm::vec3 GetIntersectionPoint(Ray ray_in);
+	glm::vec3 GetIntersectionPoint(Ray ray_in) const override;
 
-	bool DoesCollide(Ray ray_in);
+	bool DoesCollide(Ray ray_in) const override;
 
 	private:
 

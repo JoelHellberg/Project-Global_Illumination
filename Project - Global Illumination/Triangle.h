@@ -3,14 +3,16 @@
 
 #pragma once
 
+#include "Shape.h"
 #include "Material.h"
 #include "ColorDBL.h"
 #include "Ray.h"
+
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
 
-class Triangle {
+class Triangle : public Shape {
 public:
     Triangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, Material mat) {
         coordinates.push_back(point1); //Coordniates[0]
@@ -21,23 +23,23 @@ public:
         normal = glm::normalize( glm::cross((point1 - point3), (point2 - point1)) );
     };
 
-    glm::vec3 GetNormal() {
+    glm::vec3 GetNormal() const override {
         return normal;
     }
 
-    ColorDBL FetchColor() {
+    ColorDBL FetchColor() const override {
         return triangleMat.getColor();
     }
 
-	Material GetMaterial() {
+	Material GetMaterial() const override {
 		return triangleMat;
 	}
 
-    double CalculateT(Ray ray);
+    double CalculateT(Ray ray_in) const override;
 
-    glm::vec3 GetIntersectionPoint(Ray ray_in);
+    glm::vec3 GetIntersectionPoint(Ray ray_in) const override;
 
-    bool DoesCollide(Ray ray_in);
+    bool DoesCollide(Ray ray_in) const override;
 
 private:
     std::vector <glm::vec3> coordinates;
