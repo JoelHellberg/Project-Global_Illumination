@@ -10,7 +10,7 @@ double Rectangle::CalculateT(Ray ray_in) const {
 	// v: point of the surface(?)
 
 	glm::vec3 v = coordinates[0];
-	glm::vec3 s = glm::vec3(-1.0, 0.0, 0.0);
+	glm::vec3 s = ray_in.GetPs();
 	glm::vec3 N = normal;
 	glm::vec3 d = ray_in.GetRayDirection();
 
