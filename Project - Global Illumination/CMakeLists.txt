@@ -26,6 +26,8 @@ file(GLOB SOURCES
     "CollisionHandler.cpp"
     "CollisionHandler.h"
     "Shape.h"
+    "Light.h"
+    "Light.cpp"
 )
 add_executable(CMakeTarget ${SOURCES})
 
