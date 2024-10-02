@@ -46,6 +46,9 @@ std::vector<Rectangle> defineRectangles() {
 	Rectangle wallFrontLeft(glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(13.0, 0.0, 5.0), Material(ColorDBL(1.0, 0.0, 0.0), false));
 	rectangles_out.push_back(wallFrontLeft);
 
+	Rectangle lamp(glm::vec3(0.0, 2.0, 4.9), glm::vec3(5.0, 2.0, 4.9), glm::vec3(5.0, -2.0, 4.9), glm::vec3(0.0, -2.0, 4.9), Material(ColorDBL(1.0, 1.0, 1.0), false));
+	rectangles_out.push_back(lamp);
+
 	return rectangles_out;
 }
 

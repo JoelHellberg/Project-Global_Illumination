@@ -8,26 +8,35 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
 
 class CollisionHandler {
 public:
 	// Function that returns the material the shape a ray collides with
 	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in) {
 		bool shapeDetected = false;
-		glm::vec3 intersectionPoint = { 0, 0, 0 };
-		glm::vec3 normal = { 0, 0, 0 };
+
+		glm::vec3 finalIntersectionPoint = { 0, 0, 0 };
+		glm::vec3 normal = { 0,0,0 };
+
+		double distance = std::numeric_limits<double>::max();
 		Material mat = Material();
 
-		// Find the specific object ("shape") that the ray collides with
+		// Find the objects ("shape") that the ray collides with
 		for (Shape* shape : shapes_in) {
 			double dotProduct = glm::dot(shape->GetNormal(), ray_in.GetRayDirection());
 			if (dotProduct < 0.0) {
 				if (shape->DoesCollide(ray_in)) {
-					mat = shape->GetMaterial();
-					normal = shape->GetNormal();
-					intersectionPoint = shape->GetIntersectionPoint(ray_in);
+					glm::vec3 intersectionPoint = shape->GetIntersectionPoint(ray_in);
+					glm::vec3 rayStartPoint = ray_in.GetPs();
+					// Find the object that is closest to the ray's starting position
+					if (distance > glm::distance(rayStartPoint, intersectionPoint)) {
+						finalIntersectionPoint = intersectionPoint;
+						distance = glm::distance(rayStartPoint, intersectionPoint);
+						mat = shape->GetMaterial();
+						normal = shape->GetNormal();
+					}
 					shapeDetected = true;
-					break;
 				}
 			}
 		}
@@ -35,8 +44,8 @@ public:
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
 
-			mat = GetMirrorMaterial(shapes_in, ray_in, normal, intersectionPoint);
-			ray_in.PrintRayPath();
+			mat = GetMirrorMaterial(shapes_in, ray_in, normal, finalIntersectionPoint);
+			// ray_in.PrintRayPath();
 
 		}
 
