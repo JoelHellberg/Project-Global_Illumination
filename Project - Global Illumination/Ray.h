@@ -42,6 +42,23 @@ public:
 	void AddRayToList(Ray* newRay);
 	void AddToList(glm::vec3 newIntersectionPoint, Material mat);
 
+	void PrintRayPath() {
+		Ray* ptr = this;
+		while (true) {
+			glm::vec3 direction = ptr->GetRayDirection();
+			std::cout << "(" << direction.x << " , " << direction.y << " , " << direction.z << ")";
+
+			if (ptr->next == nullptr) {
+				std::cout << "\n";
+				break;
+			}
+			else {
+				ptr = ptr->next;
+				std::cout << " --> ";
+			}
+		}
+	}
+
 private:
 	glm::vec3 ps; // Starting point of the ray
 	glm::vec3 rayDirection; // Direction of the ray

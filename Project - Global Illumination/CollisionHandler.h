@@ -35,22 +35,9 @@ public:
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
 
-			Ray* ptr = &ray_in;
 			mat = GetMirrorMaterial(shapes_in, ray_in, normal, intersectionPoint);
+			ray_in.PrintRayPath();
 
-			while(true) {
-				glm::vec3 direction = ptr->GetRayDirection();
-				std::cout << "(" << direction.x << " , " << direction.y << " , " << direction.z << ")";
-
-				if(ptr->next == nullptr) {
-					std::cout << "\n";
-					break;
-				}
-				else {
-					ptr = ptr->next;
-					std::cout << " --> ";
-				}
-			}
 		}
 
 		return mat;
