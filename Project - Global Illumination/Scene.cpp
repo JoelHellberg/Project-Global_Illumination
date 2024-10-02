@@ -47,7 +47,7 @@ int main()
 			Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray);
 
 			// Print the color of the wall where collision was detected
-			printColor(mat.getColor().getColor());
+			//printColor(mat.getColor().getColor());
 		}
 	}
 

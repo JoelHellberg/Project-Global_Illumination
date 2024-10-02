@@ -34,15 +34,31 @@ public:
 
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
+
+			Ray* ptr = &ray_in;
 			mat = GetMirrorMaterial(shapes_in, ray_in, normal, intersectionPoint);
+
+			while(true) {
+				glm::vec3 direction = ptr->GetRayDirection();
+				std::cout << "(" << direction.x << " , " << direction.y << " , " << direction.z << ")";
+
+				if(ptr->next == nullptr) {
+					std::cout << "\n";
+					break;
+				}
+				else {
+					ptr = ptr->next;
+					std::cout << " --> ";
+				}
+			}
 		}
 
 		return mat;
 	}
 private:
 	// Function that returns the material of a ray within a mirror
-	static Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in) {
-		Ray ray = ray.reflection(ray_in.GetRayDirection(), normal_in, intersectionPoint_in);
+	static Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray& ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in) {
+		Ray ray = ray_in.reflection(ray_in, normal_in, intersectionPoint_in);
 		Material mat = GetCollidingMaterial(shapes_in, ray);
 		return mat;
 	}
