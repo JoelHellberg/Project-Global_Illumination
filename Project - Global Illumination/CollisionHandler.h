@@ -14,7 +14,7 @@
 class CollisionHandler {
 public:
 	// Function that returns the material of the shape that a ray collides with
-	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in) {
+	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in, Light lightSource) {
 		bool shapeDetected = false;
 
 		glm::vec3 finalIntersectionPoint = { 0, 0, 0 };
