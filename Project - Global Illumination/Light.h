@@ -7,9 +7,10 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "Material.h"
+#include "Rectangle.h"
 
 
-class Light {
+class Light : public Rectangle {
 public:
 
 	Light(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
@@ -28,7 +29,6 @@ public:
 
 
 private:
-	std::vector <glm::vec3> coordinates;
 	Material LightMaterial;
 	glm::vec3 normal;
 

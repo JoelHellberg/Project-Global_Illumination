@@ -17,6 +17,8 @@
 class Rectangle : public Shape {
 public:
 
+	Rectangle() : rectangleMaterial(Material()), normal({0,0,0}) {}
+
 	Rectangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
 		coordinates.push_back(point1);
 		coordinates.push_back(point2);
@@ -44,7 +46,7 @@ public:
 
 	bool DoesCollide(Ray ray_in) const override;
 
-	private:
+	protected:
 		std::vector <glm::vec3> coordinates;
 		Material rectangleMaterial;
 		glm::vec3 normal;

@@ -12,7 +12,7 @@
 
 class CollisionHandler {
 public:
-	// Function that returns the material the shape a ray collides with
+	// Function that returns the material of the shape that a ray collides with
 	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in) {
 		bool shapeDetected = false;
 

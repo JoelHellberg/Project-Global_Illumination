@@ -30,8 +30,12 @@ int main()
 	//Dimension of the output image
 	double dimensions = 600.0;
 
-	//Camera
+	// Define the Camera
 	Camera myCamera = Camera(dimensions, dimensions);
+	
+	// Define the Lamp
+	Light LightSource(glm::vec3(0.0, 2.0, 4.9), glm::vec3(5.0, 2.0, 4.9), glm::vec3(5.0, -2.0, 4.9), glm::vec3(0.0, -2.0, 4.9), Material(ColorDBL(1.0, 1.0, 1.0), false));
+	shapes.push_back(&LightSource);
 
 	//Std::cout for the ppm-format
 	std::cout << "P3" << "\n";//ppm
