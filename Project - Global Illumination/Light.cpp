@@ -2,3 +2,25 @@
 //
 
 #include "Light.h"
+#include <random>
+
+
+glm::vec3 Light::RandomPointOnLight(){
+	
+	srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+
+	float si = static_cast<float>(rand()) / RAND_MAX;
+	float ti = static_cast<float>(rand()) / RAND_MAX;
+     
+    glm::vec3 E1 = ReturnE1();
+    glm::vec3 E2 = ReturnE2();
+
+
+    glm::vec3 di = coordinates[0] + si * E1 + ti * E2; //Oklart om den är rätt
+
+
+    /*std::cout << "( " << di[0] << " , " << di[1] <<  " , "  << di[2] << " )" << "\n";*/
+
+    return di;
+}
+

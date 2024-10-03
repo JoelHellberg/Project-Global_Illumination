@@ -18,6 +18,11 @@ public:
 		return color;
 	};
 
+	ColorDBL changeColor(ColorDBL newColor) {
+		color = newColor;
+		return color;
+	};
+
 	bool checkIsReflective() const {
 		return isReflective;
 	};

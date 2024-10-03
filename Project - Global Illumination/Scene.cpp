@@ -17,6 +17,9 @@ int main()
 	std::vector<Rectangle> rectangles = defineRectangles();
 	std::vector<Triangle> triangles = defineTriangles();
 
+	Light LightSource(glm::vec3(0.0, 2.0, 5.0), glm::vec3(5.0, 2.0, 5.0), glm::vec3(5.0, -2.0, 5.0), glm::vec3(0.0, -2.0, 5.0), Material(ColorDBL(1.0, 1.0, 1.0), false));
+	shapes.push_back(&LightSource);
+
 	for (Rectangle& rectangle : rectangles) {
 		Shape* dummy_shape = &rectangle;
 		shapes.push_back(dummy_shape);
@@ -32,7 +35,8 @@ int main()
 
 	//Camera
 	Camera myCamera = Camera(dimensions, dimensions);
-
+	
+	/*shapes.push_back(&LightSource);*/
 	//Std::cout for the ppm-format
 	std::cout << "P3" << "\n";//ppm
 	std::cout << " " << dimensions << " " << " " << dimensions << " " << "\n"; //Dimensions for the image
@@ -44,10 +48,15 @@ int main()
 
 			Ray ray = myCamera.GetRay(j, i);
 
-			Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray);
+			Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource);
+			/*LightSource.RandomPointOnLight();*/
+
+			
+			/*std::cout << "Area: " << LightSource.GetArea();*/
+
 
 			// Print the color of the wall where collision was detected
-			printColor(mat.getColor().getColor());
+			/*printColor(mat.getColor().getColor());*/
 		}
 	}
 

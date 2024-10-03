@@ -2,9 +2,12 @@
 // or project specific include files.
 
 #pragma once
-#include <iostream>
+
+#include "Material.h"
+#include "ColorDBL.h"
 #include <glm/glm.hpp>
-#include "Ray.h"
+#include <iostream>
+#include <vector>
 
 // TODO: Reference additional headers your program requires here.
 class Shape {
@@ -16,9 +19,9 @@ public:
 
 	virtual Material GetMaterial() const = 0;
 
-	virtual glm::vec3 GetIntersectionPoint(Ray ray_in) const = 0;
+	virtual glm::vec3 GetIntersectionPoint(glm::vec3 ps, glm::vec3 rayDirection) const = 0;
 
-	virtual bool DoesCollide(Ray ray_in) const = 0;
+	virtual bool DoesCollide(glm::vec3 ps, glm::vec3 rayDirection) const = 0;
 
 	// Virtual destructor (recommended for base classes)
 	virtual ~Shape() {

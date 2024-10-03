@@ -7,9 +7,12 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "Material.h"
+#include "Rectangle.h"
+#include <random>
 
 
-class Light {
+
+class Light : public Rectangle {
 public:
 
 	Light(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
@@ -17,20 +20,37 @@ public:
 		coordinates.push_back(point2);
 		coordinates.push_back(point3);
 		coordinates.push_back(point4);
-		LightMaterial = mat;
+		rectangleMaterial = mat;
+
+		Area = glm::length(point2 - point1) * glm::length(point3 - point2);
 
 		//normal = glm::normalize(glm::cross((point2 - point1), (point3 - point1)));
 		normal = glm::normalize(glm::cross((point4 - point3), (point1 - point4)));
 	};
 
+	double GetArea() {
+		return Area;
+	}
 
+	glm::vec3 ReturnE1() {
 
+		glm::vec3 E1 = coordinates[1] - coordinates[0];
+
+		return E1;
+	}
+
+	glm::vec3 ReturnE2() {
+		glm::vec3 E2 = coordinates[2] - coordinates[1];
+
+		return E2;
+	}
+
+	glm::vec3 RandomPointOnLight();
 
 
 private:
-	std::vector <glm::vec3> coordinates;
-	Material LightMaterial;
-	glm::vec3 normal;
+	double Area;
+
 
 	//double CalculateT(Ray ray_in) const;
 };

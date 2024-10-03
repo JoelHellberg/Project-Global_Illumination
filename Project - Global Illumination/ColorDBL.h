@@ -24,6 +24,14 @@ public:
 		std::cout << n[0] * 255.0 << " " << n[1] * 255.0 << " " << n[2] * 255.0 << "\n";	 
 	}
 
+	ColorDBL MultiplyColor(ColorDBL color1) {
+		r *= color1.r;
+		g *= color1.g;
+		b *= color1.b;
+
+		return *this;
+	}
+
 
 private:
 	//Double precision values for colors

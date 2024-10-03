@@ -4,18 +4,13 @@
 #pragma once
 
 #include "Shape.h"
-#include "Material.h"
-#include "ColorDBL.h"
-#include "Ray.h"
-
-#include <glm/glm.hpp>
-#include <iostream>
-#include <vector>
 
 // TODO: Reference additional headers your program requires here.
 
 class Rectangle : public Shape {
 public:
+
+	Rectangle() : rectangleMaterial(Material()), normal({ 0,0,0 }) {}
 
 	Rectangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
 		coordinates.push_back(point1);
@@ -25,7 +20,7 @@ public:
 		rectangleMaterial = mat;
 
 		//normal = glm::normalize(glm::cross((point2 - point1), (point3 - point1)));
-		normal = glm::normalize( glm::cross((point4 - point3), (point1 - point4)));
+		normal = glm::normalize(glm::cross((point4 - point3), (point1 - point4)));
 	};
 
 	glm::vec3 GetNormal() const override {
@@ -40,15 +35,15 @@ public:
 		return rectangleMaterial;
 	}
 
-	glm::vec3 GetIntersectionPoint(Ray ray_in) const override;
+	glm::vec3 GetIntersectionPoint(glm::vec3 ps, glm::vec3 rayDirection) const override;
 
-	bool DoesCollide(Ray ray_in) const override;
+	bool DoesCollide(glm::vec3 ps, glm::vec3 rayDirection) const override;
 
-	private:
-		std::vector <glm::vec3> coordinates;
-		Material rectangleMaterial;
-		glm::vec3 normal;
+protected:
+	std::vector <glm::vec3> coordinates;
+	Material rectangleMaterial;
+	glm::vec3 normal;
 
-		double CalculateT(Ray ray_in) const;
+	double CalculateT(glm::vec3 ps, glm::vec3 rayDirection) const;
 };
 

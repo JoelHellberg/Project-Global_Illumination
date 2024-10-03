@@ -2,10 +2,14 @@
 // or project specific include files.
 
 #pragma once
+#define _USE_MATH_DEFINES
+
 #include <glm/glm.hpp>
 #include <iostream>
 #include "ColorDBL.h"
 #include "Material.h"
+#include "Light.h"
+#include <cmath>
 
 
 
@@ -41,6 +45,8 @@ public:
 
 	void AddRayToList(Ray* newRay);
 	void AddToList(glm::vec3 newIntersectionPoint, Material mat);
+
+	ColorDBL GetLightIntensity(Shape* shape, Light lightSource, int raysAmount);
 
 	void PrintRayPath() {
 		Ray* ptr = this;
