@@ -33,7 +33,7 @@ int main()
 	//Dimension of the output image
 	double dimensions = 600.0;
 
-	//Camera
+	// Define the Camera
 	Camera myCamera = Camera(dimensions, dimensions);
 	
 	/*shapes.push_back(&LightSource);*/
