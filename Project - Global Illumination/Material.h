@@ -10,9 +10,11 @@
 class Material {
 
 public:
-	Material() : color(ColorDBL()), isReflective( false ) {};
+	Material() : color(ColorDBL()), isReflective( false ), isLightSource( false ) {};
 
 	Material(ColorDBL color_in, bool isReflective_in) : color(color_in), isReflective(isReflective_in){};
+	
+	Material(ColorDBL color_in, bool isReflective_in, bool isLightSource_in) : color(color_in), isReflective(isReflective_in), isLightSource(isLightSource_in) {};
 
 	ColorDBL getColor() const {
 		return color;
@@ -27,8 +29,13 @@ public:
 		return isReflective;
 	};
 
+	bool checkIsLightSource() const {
+		return isLightSource;
+	};
+
 private:
 	ColorDBL color;
-	bool isReflective;
+	bool isReflective = false;
+	bool isLightSource = false;
 
 };

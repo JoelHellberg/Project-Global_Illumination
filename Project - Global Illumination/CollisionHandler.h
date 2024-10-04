@@ -42,9 +42,11 @@ public:
 		}
 
 		//Apply lightning
-		ColorDBL intensity = ray_in.GetLightIntensity(normal, lightSource, 5, finalIntersectionPoint);
-		ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity);
-		mat.changeColor(newColor);
+		if(!mat.checkIsLightSource()) {
+			ColorDBL intensity = ray_in.GetLightIntensity(normal, lightSource, 5, finalIntersectionPoint);
+			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity);
+			mat.changeColor(newColor);
+		}
 
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
