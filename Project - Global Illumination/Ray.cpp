@@ -35,8 +35,8 @@ void Ray::AddRayToList(Ray* newRay) {
 	this->next = newRay;
 }
 
-ColorDBL Ray::GetLightIntensity(Shape* shape, Light lightSource, int raysAmount) {
-	glm::vec3 surfaceNormal = shape->GetNormal();
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount) {
+	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0, 0, -1);
 
 	double area = lightSource.GetArea();

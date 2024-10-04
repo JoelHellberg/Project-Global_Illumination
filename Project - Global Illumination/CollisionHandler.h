@@ -19,8 +19,6 @@ public:
 
 		glm::vec3 finalIntersectionPoint = { 0, 0, 0 };
 		glm::vec3 normal = { 0,0,0 };
-		Shape* finalShape = 0;
-
 		double distance = std::numeric_limits<double>::max();
 		Material mat = Material();
 
@@ -31,14 +29,12 @@ public:
 				if (shape->DoesCollide(ray_in.GetPs(), ray_in.GetRayDirection())) {
 					glm::vec3 intersectionPoint = shape->GetIntersectionPoint(ray_in.GetPs(), ray_in.GetRayDirection());
 					glm::vec3 rayStartPoint = ray_in.GetPs();
-					finalShape = shape;
 					// Find the object that is closest to the ray's starting position
 					if (distance > glm::distance(rayStartPoint, intersectionPoint)) {
 						finalIntersectionPoint = intersectionPoint;
 						distance = glm::distance(rayStartPoint, intersectionPoint);
 						mat = shape->GetMaterial();
 						normal = shape->GetNormal();
-						finalShape = shape;
 					}
 					shapeDetected = true;
 				}
@@ -46,8 +42,8 @@ public:
 		}
 
 		//Apply lightning
-		ColorDBL intensity = ray_in.GetLightIntensity(finalShape, lightSource, 5);
-		ColorDBL newColor = (finalShape->FetchColor()).MultiplyColor(intensity);
+		ColorDBL intensity = ray_in.GetLightIntensity(normal, lightSource, 5);
+		ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity);
 		mat.changeColor(newColor);
 
 		// Calculate the color within a mirror
