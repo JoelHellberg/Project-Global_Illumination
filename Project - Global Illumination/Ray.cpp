@@ -54,6 +54,10 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 
 	double luminance = ((area) / ((float)M_PI * raysAmount)) * sumResult;
 
+	// Clamp the luminance to be between 0 and 1
+	luminance = std::clamp(luminance, 0.0, 1.0);
+
+
 	return ColorDBL(luminance, luminance, luminance);
 
 
