@@ -45,7 +45,7 @@ public:
 
 	void AddRayToList(Ray* newRay);
 
-	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount);
+	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint);
 
 	void PrintRayPath() {
 		Ray* ptr = this;

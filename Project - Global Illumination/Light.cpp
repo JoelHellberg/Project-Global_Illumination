@@ -6,8 +6,6 @@
 
 
 glm::vec3 Light::RandomPointOnLight(){
-	
-	srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 
 	float si = static_cast<float>(rand()) / RAND_MAX;
 	float ti = static_cast<float>(rand()) / RAND_MAX;

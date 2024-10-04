@@ -35,21 +35,21 @@ void Ray::AddRayToList(Ray* newRay) {
 	this->next = newRay;
 }
 
-ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount) {
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint) {
 	glm::vec3 surfaceNormal = normal;
-	glm::vec3 LightSourceNormal(0, 0, -1);
+	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
-	double area = lightSource.GetArea();
+	double area = lightSource.GetArea() * 10.0;
 
 	double sumResult = 0;
 
 	for (int i = 0; i < raysAmount; i++) {
-		glm::vec3 lightRay = lightSource.RandomPointOnLight();
+		glm::vec3 lightRay = lightSource.RandomPointOnLight() - intersectionPoint;
 
 		double cosX = glm::dot(surfaceNormal, lightRay) / glm::length(lightRay);
 		double cosY = glm::dot(-LightSourceNormal, lightRay) / glm::length(lightRay);
 
-		sumResult += (cosX*cosY)/ std::pow(glm::length(lightRay),2);
+		sumResult += (cosX*cosY) / std::pow(glm::length(lightRay),2.0);
 	}
 
 	double luminance = ((area) / ((float)M_PI * raysAmount)) * sumResult;
