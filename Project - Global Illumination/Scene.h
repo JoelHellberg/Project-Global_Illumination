@@ -47,6 +47,10 @@ std::vector<Rectangle> defineRectangles() {
 	Rectangle wallFrontLeft(glm::vec3(10.0, 6.0, 5.0), glm::vec3(10.0, 6.0, -5.0), glm::vec3(13.0, 0.0, -5.0), glm::vec3(13.0, 0.0, 5.0), Material(ColorDBL(1.0, 0.0, 0.0), false));
 	rectangles_out.push_back(wallFrontLeft);
 
+	// Floor of Tetraed
+	Rectangle tetraFloor(glm::vec3(6.0, 4.0, -3.0), glm::vec3(8.0, 4.0, -3.0), glm::vec3(8.0, 2.0, -3.0), glm::vec3(6.0, 2.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	rectangles_out.push_back(tetraFloor);
+
 	return rectangles_out;
 }
 
@@ -77,6 +81,30 @@ std::vector<Triangle> defineTriangles() {
 	triangles_out.push_back(roofFrontL);
 	Triangle roofFrontR(glm::vec3(10.0, 0.0, 5.0), glm::vec3(13.0, 0.0, 5.0), glm::vec3(10.0, -6.0, 5.0), Material(ColorDBL(0.5, 0.5, 0.5), false));
 	triangles_out.push_back(roofFrontR);
+
+	// Triangles of Tetraed
+	Triangle rightWallTetraedLeft(glm::vec3(7.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 4.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(rightWallTetraedLeft);
+	Triangle rightWallTetraedRight(glm::vec3(7.0, 4.0, -3.0), glm::vec3(6.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(rightWallTetraedRight);
+
+	// Egentiligen fram
+	Triangle leftWallTetraedLeft(glm::vec3(6.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 4.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(leftWallTetraedLeft);
+	Triangle leftWallTetraedRight(glm::vec3(6.0, 3.0, -3.0), glm::vec3(6.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(leftWallTetraedRight);
+
+	// Egentligen höger
+	Triangle frontWallTetraedLeft(glm::vec3(7.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 2.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(frontWallTetraedLeft);
+	Triangle frontWallTetraedRight(glm::vec3(7.0, 2.0, -3.0), glm::vec3(8.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(frontWallTetraedRight);
+
+	// Egentligen bakifrån
+	Triangle backWallTetraedLeft(glm::vec3(8.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 2.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(backWallTetraedLeft);
+	Triangle backWallTetraedRight(glm::vec3(8.0, 3.0, -3.0), glm::vec3(8.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	triangles_out.push_back(backWallTetraedRight);
 
 	return triangles_out;
 }

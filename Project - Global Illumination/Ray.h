@@ -9,6 +9,7 @@
 #include "ColorDBL.h"
 #include "Material.h"
 #include "Light.h"
+#include "Shape.h"
 #include <cmath>
 
 
@@ -45,7 +46,7 @@ public:
 
 	void AddRayToList(Ray* newRay);
 
-	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint);
+	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in);
 
 	void PrintRayPath() {
 		Ray* ptr = this;
