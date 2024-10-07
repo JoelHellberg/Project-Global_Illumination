@@ -39,24 +39,28 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
-	double area = lightSource.GetArea() * 10.0;
+	ColorDBL shadowIntensity = ColorDBL(0.0, 0.0, 0.0);
 
-	double sumResult = 0;
+	double area = lightSource.GetArea();
+
+	double sumResult = 0.0;
 
 	for (int i = 0; i < raysAmount; i++) {
-		glm::vec3 randomPoint = lightSource.RandomPointOnLight();
-		glm::vec3 lightRay = randomPoint - intersectionPoint;
-
-		Ray lightRayRay = Ray(lightRay, randomPoint);
+		glm::vec3 pointOnLight = lightSource.RandomPointOnLight();
+		glm::vec3 lightRayDirection = glm::normalize(intersectionPoint - pointOnLight);
 
 		bool hitsObject = true;
 
+		glm::vec3 pointOnObject = intersectionPoint;
+	
+		Ray GetLightIntensity(pointOnObject, glm::normalize(lightRayDirection));
+
 		for (Shape* shape : shapes_in) {
-			double dotProduct = glm::dot(shape->GetNormal(), lightRayRay.GetRayDirection());
+			double dotProduct = glm::dot(shape->GetNormal(), lightRayDirection);
 			if (dotProduct < 0.0) {
-				if (shape->DoesCollide(lightRayRay.GetPs(), lightRayRay.GetRayDirection())) {
-					glm::vec3 intersectionPointNew = shape->GetIntersectionPoint(lightRayRay.GetPs(), lightRayRay.GetRayDirection());
-					if (glm::distance(randomPoint, intersectionPointNew) < glm::distance(randomPoint, intersectionPoint)) {
+				if (shape->DoesCollide(pointOnLight, lightRayDirection)) {
+					glm::vec3 intersectionPointNew = shape->GetIntersectionPoint(pointOnLight, lightRayDirection);
+					if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
 						hitsObject = false;
 						break;
 					}
@@ -65,17 +69,16 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 		}
 
 		if (hitsObject) {
-			double cosX = glm::dot(surfaceNormal, lightRay) / glm::length(lightRay);
-			double cosY = glm::dot(-LightSourceNormal, lightRay) / glm::length(lightRay);
+			double cosX = glm::dot(surfaceNormal, lightRayDirection) / glm::length(lightRayDirection);
+			double cosY = glm::dot(-LightSourceNormal, lightRayDirection) / glm::length(lightRayDirection);
 
-			sumResult += (cosX * cosY) / std::pow(glm::length(lightRay), 2.0);
+			sumResult += (cosX * cosY) / std::pow(glm::length(lightRayDirection), 2.0);
 		}
 
 	}
 
-		// Clamp the luminance to be between 0 and 1
-		double luminance = ((area) / ((float)M_PI * raysAmount)) * sumResult;
-		luminance = std::clamp(luminance, 0.0, 1.0);
+		double luminance = ((area / 5.0f) / ((float)M_PI * raysAmount)) * sumResult;
+		shadowIntensity += ColorDBL(luminance, luminance, luminance);
 
 		return ColorDBL(luminance, luminance, luminance);
 }

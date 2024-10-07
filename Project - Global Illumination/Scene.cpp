@@ -2,6 +2,8 @@
 //
 
 #include "Scene.h"
+#include <ppl.h>
+
 
 //Print all color in a column
 void printColor(std::vector<double> colorValues_in) {
@@ -36,29 +38,33 @@ int main()
 	// Define the Camera
 	Camera myCamera = Camera(dimensions, dimensions);
 	
-	/*shapes.push_back(&LightSource);*/
 	//Std::cout for the ppm-format
 	std::cout << "P3" << "\n";//ppm
 	std::cout << " " << dimensions << " " << " " << dimensions << " " << "\n"; //Dimensions for the image
 	std::cout << "255" << "\n"; //Define that RGB is used
 
 	int number_of_reflections = 0;
-	for (double i = dimensions - 1.0; i >= 0.0; i--) {
-		for (double j = dimensions - 1.0; j >= 0.0; j--) {
 
-			Ray ray = myCamera.GetRay(j, i);
+	//concurrency::parallel_for(size_t(0), (size_t)dimensions, [&](size_t j) {
+			for (double i = dimensions - 1.0; i >= 0.0; i--) {
+				for (double j = dimensions - 1.0; j >= 0.0; j--) {
 
-			Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource);
-			/*LightSource.RandomPointOnLight();*/
+					Ray ray = myCamera.GetRay(j, i);
 
-			
-			/*std::cout << "Area: " << LightSource.GetArea();*/
+					Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource);
+					/*LightSource.RandomPointOnLight();*/
 
 
-			// Print the color of the wall where collision was detected
-			printColor(mat.getColor().getColor());
-		}
-	}
+					/*std::cout << "Area: " << LightSource.GetArea();*/
+
+
+					// Clamp the colors
+					mat.changeColor(mat.getColor().ClampColors());
+					// Print the color of the wall where collision was detected
+					printColor(mat.getColor().getColor());
+				}
+			}
+		//});
 
 	return 0;
 

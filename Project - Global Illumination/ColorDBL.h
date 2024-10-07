@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
 
 class ColorDBL {
 public:
@@ -29,6 +31,28 @@ public:
 		g *= color1.g;
 		b *= color1.b;
 
+		return *this;
+	}
+
+	ColorDBL ClampColors() {
+		r = std::clamp(r, 0.0, 1.0);
+		g = std::clamp(g, 0.0, 1.0);
+		b = std::clamp(b, 0.0, 1.0);
+
+		return *this;
+	}
+
+	ColorDBL divide(double divider) const {
+		if (divider <= 0) {
+			return ColorDBL(1, 1, 1);
+		}
+		return ColorDBL(r / divider, g / divider, b / divider);
+	}
+
+	ColorDBL& operator+=(const ColorDBL& other) {
+		r += other.r;
+		g += other.g;
+		b += other.b;
 		return *this;
 	}
 
