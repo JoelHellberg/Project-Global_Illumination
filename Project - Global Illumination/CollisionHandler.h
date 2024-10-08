@@ -43,7 +43,7 @@ public:
 
 		//Apply lightning
 		if(!mat.checkIsLightSource()) {
-			ColorDBL intensity = ray_in.GetLightIntensity(normal, lightSource, 20, finalIntersectionPoint, shapes_in);
+			ColorDBL intensity = ray_in.GetLightIntensity(normal, lightSource, 10, finalIntersectionPoint, shapes_in);
 			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity);
 			mat.changeColor(newColor);
 		}

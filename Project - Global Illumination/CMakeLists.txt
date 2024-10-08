@@ -28,6 +28,8 @@ file(GLOB SOURCES
     "Shape.h"
     "Light.h"
     "Light.cpp"
+    "Sphere.h"
+    "Sphere.cpp"
 )
 add_executable(CMakeTarget ${SOURCES})
 

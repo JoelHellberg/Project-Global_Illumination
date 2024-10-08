@@ -14,6 +14,7 @@
 #include "Ray.h"
 #include "Material.h"
 #include "Light.h"
+#include "Sphere.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -50,6 +51,7 @@ std::vector<Rectangle> defineRectangles() {
 	// Floor of Tetraed
 	Rectangle tetraFloor(glm::vec3(6.0, 4.0, -3.0), glm::vec3(8.0, 4.0, -3.0), glm::vec3(8.0, 2.0, -3.0), glm::vec3(6.0, 2.0, -3.0), Material(ColorDBL(1.0, 1.0, 0.0), false));
 	rectangles_out.push_back(tetraFloor);
+
 
 	return rectangles_out;
 }
@@ -107,6 +109,17 @@ std::vector<Triangle> defineTriangles() {
 	triangles_out.push_back(backWallTetraedRight);
 
 	return triangles_out;
+}
+
+std::vector<Sphere> defineSphere(){
+
+	std::vector<Sphere> sphere_out;
+
+		Sphere sphere(1.0, glm::vec3(10, 0, -4), Material(ColorDBL(1.0, 1.0, 0.0), false));
+		sphere_out.push_back(sphere);
+
+		return sphere_out;
+	
 }
 
 
