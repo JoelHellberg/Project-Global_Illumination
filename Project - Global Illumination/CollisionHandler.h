@@ -6,6 +6,7 @@
 #include "Shape.h"
 #include "Ray.h"
 #include "Light.h"
+#include "Scene.h"
 
 #include <iostream>
 #include <vector>
@@ -21,6 +22,9 @@ public:
 		glm::vec3 normal = { 0,0,0 };
 		double distance = std::numeric_limits<double>::max();
 		Material mat = Material();
+
+		
+		
 
 		// Find the objects ("shape") that the ray collides with
 		for (Shape* shape : shapes_in) {

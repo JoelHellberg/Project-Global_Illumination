@@ -5,15 +5,10 @@
 #include "Ray.h"
 #include <cmath>
 
+void Sphere::CalculateNormal(glm::vec3 Xr, glm::vec3 center) {
+	 
+	normal = (Xr - center) / glm::length(Xr - center);
 
-double Sphere::CalculateArg(glm::vec3 rayDirection, glm::vec3 center) const{
-	glm::vec3 S(-1.0, 0.0, 0.0);
-	glm::vec3 D = rayDirection;
-	glm::vec3 C = center;
-
-	double arg = 2.0f * glm::dot(D, (S - C));
-
-	return arg;
 }
 
 void Sphere::CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection) {
@@ -37,7 +32,7 @@ void Sphere::CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection)
 	//c2 = 2*D(S-C)
 
 	//c3 = (S-C)^2 -r^2
-	c3 = glm::dot((S - C), (S - C)) - std::pow(r,2);
+	c3 = glm::dot((S - C), (S - C)) - std::pow(r, 2);
 
 	//t = (-c2 +- sqrt(c2^2 - 4*c1*c3))/(2*c1);
 	//om c2^2-4*c1*c3 < 0 -> ray miss
@@ -45,38 +40,56 @@ void Sphere::CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection)
 	//om c2^2-4*c1*c3 > 0 -> ray touches sphere -> 2 solutions
 }
 
-float Sphere::CalculateT(glm::vec3 raydirection, glm::vec3 center) const{
-		
-	double arg = CalculateArg(raydirection, center);
-	double t_min = 0;
+double Sphere::CalculateArg(glm::vec3 rayDirection, glm::vec3 center) const{
+	glm::vec3 S(-1.0, 0.0, 0.0);
+	glm::vec3 D = rayDirection;
+	glm::vec3 C = center;
 
-	if (arg == 0) {
-		t_min = -c2;
-		return t_min;
-	}
-	else if(arg > 0) {
-		 t_min = -c2 - sqrt(glm::dot(c2, c2) - 4 * glm::dot(c1, c3));
-		return t_min;
-	}
-	else {
-		return t_min;
-	}
+	double arg = 2.0f * glm::dot(D, (S - C));
+
+	return arg;
 }
+
+
+
 
 
 glm::vec3 Sphere::GetIntersectionPoint(glm::vec3 raydirection, glm::vec3 center) const {
 
-	float t = CalculateT(raydirection, center);
 
-	glm::vec3 Xr = center - raydirection * t;
+
+	double arg = CalculateArg(raydirection, center);
+
+	float t_min = 0;
+
+	if (arg == 0) {
+		t_min = -c2;
+	}
+	else if (arg > 0) {
+		t_min = -c2 - sqrt(glm::dot(c2, c2) - 4 * glm::dot(c1, c3));
+	}
+
+	
+	glm::vec3 Xr = center - raydirection * t_min;
 
 
 	return Xr;
 }
 
 
-bool Sphere::DoesCollide(glm::vec3 ps, glm::vec3 rayDirection) const {
+bool Sphere::DoesCollide(glm::vec3 raydirection, glm::vec3 center) const {
 
-	return false;
+	double arg = CalculateArg(raydirection, center);
+
+
+	if (arg == 0) {
+		return true;
+	}
+	else if (arg > 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 

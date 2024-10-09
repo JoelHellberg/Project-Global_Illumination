@@ -33,6 +33,8 @@ public:
         return normal;
     }
 
+    void CalculateNormal(glm::vec3 Xr, glm::vec3 center);
+
     double GetC1() {
         return c1;
     }
@@ -49,7 +51,6 @@ public:
 
     void CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection);
 
-    float CalculateT(glm::vec3 raydirection, glm::vec3 center) const;
 
     double CalculateArg(glm::vec3 raydirection, glm::vec3 center) const;
 

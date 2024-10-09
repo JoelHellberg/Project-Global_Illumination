@@ -32,6 +32,8 @@ int main()
 	}
 
 
+
+
 	//Dimension of the output image
 	double dimensions = 600.0;
 
@@ -52,6 +54,7 @@ int main()
 					Ray ray = myCamera.GetRay(j, i);
 
 					Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource);
+
 					/*LightSource.RandomPointOnLight();*/
 
 
