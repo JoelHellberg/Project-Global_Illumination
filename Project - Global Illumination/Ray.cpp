@@ -47,7 +47,7 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 
 	for (int i = 0; i < raysAmount; i++) {
 		glm::vec3 pointOnLight = lightSource.RandomPointOnLight();
-		glm::vec3 lightRayDirection = glm::normalize(intersectionPoint - pointOnLight);
+		glm::vec3 lightRayDirection = intersectionPoint - pointOnLight;
 
 		bool hitsObject = true;
 
