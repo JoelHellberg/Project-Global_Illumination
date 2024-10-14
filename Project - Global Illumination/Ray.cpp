@@ -35,7 +35,7 @@ void Ray::AddRayToList(Ray* newRay) {
 	this->next = newRay;
 }
 
-ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in) {
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in) {
 	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
@@ -64,6 +64,17 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 						hitsObject = false;
 						break;
 					}
+				}
+			}
+		}
+
+		for (Sphere& sphere : spheres_in) {
+			if (sphere.DoesCollide(lightRayDirection, pointOnLight)) {
+				glm::vec3 intersectionPointNew = sphere.GetIntersectionPoint(lightRayDirection, pointOnLight);
+				// Find the object that is closest to the ray's starting position
+				if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
+					hitsObject = false;
+					break;
 				}
 			}
 		}
