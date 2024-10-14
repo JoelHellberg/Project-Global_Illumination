@@ -77,7 +77,7 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 
 	}
 
-		double luminance = ((area / 5.0f) / ((float)M_PI * raysAmount)) * sumResult;
+		double luminance = ((area * 10.0f) / ((float)M_PI * raysAmount)) * sumResult;
 		shadowIntensity += ColorDBL(luminance, luminance, luminance);
 
 		return ColorDBL(luminance, luminance, luminance);

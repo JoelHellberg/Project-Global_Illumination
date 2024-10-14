@@ -2,17 +2,21 @@
 // or project specific include files.
 
 #pragma once
+#include "Material.h"
+#include "ColorDBL.h"
+#include <glm/glm.hpp>
+#include <iostream>
+#include <vector>
+#include <cmath>
 
-#include "Shape.h"
-
-class Sphere : public Shape {
+class Sphere {
 public:
 
     /*Sphere() = default;*/
 
-    Sphere(const double& r, const glm::vec3& center, Material material) {
+    Sphere(const double& r, const glm::vec3& center_in, Material material) {
         radius = r;
-        Center = center;
+        center = center_in;
         Spherematerial = material;
 
     }
@@ -21,15 +25,15 @@ public:
     //    return normal;
     //}
 
-    ColorDBL FetchColor() const override {
+    ColorDBL FetchColor() const {
         return Spherematerial.getColor();
     }
 
-    Material GetMaterial() const override {
+    Material GetMaterial() const {
         return Spherematerial;
     }
 
-    glm::vec3 GetNormal() const override {
+    glm::vec3 GetNormal() const {
         return normal;
     }
 
@@ -47,22 +51,22 @@ public:
         return c3;
     }
 
-    glm::vec3 GetIntersectionPoint(glm::vec3 raydirection, glm::vec3 center) const override;
+    glm::vec3 GetIntersectionPoint(glm::vec3 raydirection);
 
-    void CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection);
+    /*void CalculateC(glm::vec3 center, double radius, glm::vec3 rayDirection);*/
 
 
-    double CalculateArg(glm::vec3 raydirection, glm::vec3 center) const;
+    double CalculateArg(glm::vec3 raydirection, glm::vec3 center);
 
-    bool DoesCollide(glm::vec3 ps, glm::vec3 rayDirection) const override;
+    bool DoesCollide(glm::vec3 rayDirection);
 
 private:
 
     double radius;
-    glm::vec3 Center;
+    glm::vec3 center;
     Material Spherematerial;
-    glm::vec3 normal;
-    double c1;
-    double c2;
-    double c3;
+    glm::vec3 normal = { 0.0, 0.0, 0.0 };
+    double c1 = 0.0;
+    double c2 = 0.0;
+    double c3 = 0.0;
 };

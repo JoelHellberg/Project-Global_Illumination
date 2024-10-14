@@ -7,6 +7,8 @@
 #include "Ray.h"
 #include "Light.h"
 #include "Scene.h"
+#include "Sphere.h"
+
 
 #include <iostream>
 #include <vector>
@@ -14,18 +16,8 @@
 
 class CollisionHandler {
 public:
-	// Function that returns the material of the shape that a ray collides with
-	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in, Light lightSource) {
-		bool shapeDetected = false;
 
-		glm::vec3 finalIntersectionPoint = { 0, 0, 0 };
-		glm::vec3 normal = { 0,0,0 };
-		double distance = std::numeric_limits<double>::max();
-		Material mat = Material();
-
-		
-		
-
+	static void GetCollidingMaterialPolygon(std::vector<Shape*> shapes_in, Ray ray_in, Light lightSource, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal, bool& shapeDetected) {
 		// Find the objects ("shape") that the ray collides with
 		for (Shape* shape : shapes_in) {
 			double dotProduct = glm::dot(shape->GetNormal(), ray_in.GetRayDirection());
@@ -44,6 +36,42 @@ public:
 				}
 			}
 		}
+	}
+
+	static void GetCollidingMaterialSphere(std::vector<Sphere> spheres_in, Ray ray_in, Light lightSource, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal, bool& shapeDetected) {
+		for (Sphere &sphere : spheres_in) {
+			if (sphere.DoesCollide(ray_in.GetRayDirection())) {
+				glm::vec3 intersectionPoint = sphere.GetIntersectionPoint(ray_in.GetRayDirection());
+				glm::vec3 rayStartPoint = ray_in.GetPs();
+				// Find the object that is closest to the ray's starting position
+				if (distance > glm::distance(rayStartPoint, intersectionPoint)) {
+					finalIntersectionPoint = intersectionPoint;
+					distance = glm::distance(rayStartPoint, intersectionPoint);
+					mat = sphere.GetMaterial();
+					normal = sphere.GetNormal();
+				}
+				shapeDetected = true;
+			}
+		}
+	}
+
+
+
+	// Function that returns the material of the shape that a ray collides with
+	static Material GetCollidingMaterial(std::vector<Shape*> shapes_in, Ray ray_in, Light lightSource, std::vector<Sphere> spheres_in) {
+		bool shapeDetected = false;
+
+		glm::vec3 finalIntersectionPoint = { 0, 0, 0 };
+		glm::vec3 normal = { 0,0,0 };
+		double distance = std::numeric_limits<double>::max();
+		Material mat = Material();
+
+		
+		
+
+		// Find the objects ("shape") that the ray collides with
+		GetCollidingMaterialPolygon(shapes_in, ray_in, lightSource, distance, finalIntersectionPoint, mat, normal, shapeDetected);
+		GetCollidingMaterialSphere(spheres_in, ray_in, lightSource, distance, finalIntersectionPoint, mat, normal, shapeDetected);
 
 		//Apply lightning
 		if(!mat.checkIsLightSource()) {
@@ -55,7 +83,7 @@ public:
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective() && shapeDetected) {
 
-			mat = GetMirrorMaterial(shapes_in, ray_in, normal, finalIntersectionPoint, lightSource);
+			mat = GetMirrorMaterial(shapes_in, ray_in, normal, finalIntersectionPoint, lightSource, spheres_in);
 			// ray_in.PrintRayPath();
 
 		}
@@ -64,9 +92,9 @@ public:
 	}
 private:
 	// Function that returns the material of a ray within a mirror
-	static Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray& ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in, Light lightSource) {
+	static Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray& ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in, Light lightSource, std::vector<Sphere> spheres_in) {
 		Ray ray = ray_in.reflection(ray_in, normal_in, intersectionPoint_in);
-		Material mat = GetCollidingMaterial(shapes_in, ray, lightSource);
+		Material mat = GetCollidingMaterial(shapes_in, ray, lightSource, spheres_in);
 		return mat;
 	}
 };

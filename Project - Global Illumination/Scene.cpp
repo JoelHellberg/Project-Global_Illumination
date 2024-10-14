@@ -31,6 +31,8 @@ int main()
 		shapes.push_back(dummy_shape);
 	}
 
+	std::vector<Sphere> spheres = defineSphere();
+
 
 
 
@@ -53,7 +55,7 @@ int main()
 
 					Ray ray = myCamera.GetRay(j, i);
 
-					Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource);
+					Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource, spheres);
 
 					/*LightSource.RandomPointOnLight();*/
 
