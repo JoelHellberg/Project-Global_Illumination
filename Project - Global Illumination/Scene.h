@@ -115,10 +115,10 @@ std::vector<Sphere> defineSphere(){
 
 	std::vector<Sphere> sphere_out;
 
-		Sphere sphere(1.0, glm::vec3(10, 0, -4), Material(ColorDBL(1.0, 1.0, 0.0), false));
-		sphere_out.push_back(sphere);
+	Sphere sphere(1.0, glm::vec3(10, 0, -4), Material(ColorDBL(1.0, 1.0, 0.0), false));
+	sphere_out.push_back(sphere);
 
-		return sphere_out;
+	return sphere_out;
 	
 }
 

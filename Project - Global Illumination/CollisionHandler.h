@@ -40,15 +40,15 @@ public:
 
 	static void GetCollidingMaterialSphere(std::vector<Sphere> spheres_in, Ray ray_in, Light lightSource, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal, bool& shapeDetected) {
 		for (Sphere &sphere : spheres_in) {
-			if (sphere.DoesCollide(ray_in.GetRayDirection())) {
-				glm::vec3 intersectionPoint = sphere.GetIntersectionPoint(ray_in.GetRayDirection());
+			if (sphere.DoesCollide(ray_in.GetRayDirection(), ray_in.GetPs())) {
+				glm::vec3 intersectionPoint = sphere.GetIntersectionPoint(ray_in.GetRayDirection(), ray_in.GetPs());
 				glm::vec3 rayStartPoint = ray_in.GetPs();
 				// Find the object that is closest to the ray's starting position
 				if (distance > glm::distance(rayStartPoint, intersectionPoint)) {
 					finalIntersectionPoint = intersectionPoint;
 					distance = glm::distance(rayStartPoint, intersectionPoint);
 					mat = sphere.GetMaterial();
-					normal = sphere.GetNormal();
+					normal = sphere.CalculateNormal(ray_in.GetRayDirection(), ray_in.GetPs());
 				}
 				shapeDetected = true;
 			}
