@@ -14,21 +14,35 @@ void printColor(std::vector<double> colorValues_in) {
 int main()
 {
 	//Vectors which saves the shapes of the scene
-	std::vector<Shape*> shapes;
+	std::vector<Shape*> room;
 
 	std::vector<Rectangle> rectangles = defineRectangles();
 	std::vector<Triangle> triangles = defineTriangles();
 
 	Light LightSource(glm::vec3(0.0, 2.0, 5.0), glm::vec3(5.0, 2.0, 5.0), glm::vec3(5.0, -2.0, 5.0), glm::vec3(0.0, -2.0, 5.0), Material(ColorDBL(1.0, 1.0, 1.0), false, true));
-	shapes.push_back(&LightSource);
+	room.push_back(&LightSource);
 
 	for (Rectangle& rectangle : rectangles) {
 		Shape* dummy_shape = &rectangle;
-		shapes.push_back(dummy_shape);
+		room.push_back(dummy_shape);
 	}
 	for (Triangle& triangle : triangles) {
 		Shape* dummy_shape = &triangle;
-		shapes.push_back(dummy_shape);
+		room.push_back(dummy_shape);
+	}
+
+	std::vector<Shape*> obstacles;
+
+	std::vector<Rectangle> rectanglesObstacles = defineObstaclesRectangles();
+	std::vector<Triangle> trianglesObstacles = defineObstaclesTriangles();
+
+	for (Rectangle& rectangle : rectanglesObstacles) {
+		Shape* dummy_shape = &rectangle;
+		obstacles.push_back(dummy_shape);
+	}
+	for (Triangle& triangle : trianglesObstacles) {
+		Shape* dummy_shape = &triangle;
+		obstacles.push_back(dummy_shape);
 	}
 
 	std::vector<Sphere> spheres = defineSphere();
@@ -48,14 +62,16 @@ int main()
 	std::cout << "255" << "\n"; //Define that RGB is used
 
 	int number_of_reflections = 0;
+	CollisionHandler myCollisionHandler(room, obstacles, spheres, LightSource);
+	std::vector<std::vector<double>> pixelColors;
 
-	//concurrency::parallel_for(size_t(0), (size_t)dimensions, [&](size_t j) {
+	// concurrency::parallel_for(size_t(0), (size_t)dimensions, [&](size_t j) {
 			for (double i = dimensions - 1.0; i >= 0.0; i--) {
 				for (double j = dimensions - 1.0; j >= 0.0; j--) {
 
 					Ray ray = myCamera.GetRay(j, i);
 
-					Material mat = CollisionHandler().GetCollidingMaterial(shapes, ray, LightSource, spheres);
+					Material mat = myCollisionHandler.GetCollidingMaterial(ray);
 
 					/*LightSource.RandomPointOnLight();*/
 
@@ -67,9 +83,14 @@ int main()
 					mat.changeColor(mat.getColor().ClampColors());
 					// Print the color of the wall where collision was detected
 					printColor(mat.getColor().getColor());
+					//pixelColors.push_back(mat.getColor().getColor());
 				}
 			}
 		//});
+
+	//for (std::vector<double> color : pixelColors) {
+	//	printColor(color);
+	//}
 
 	return 0;
 

@@ -35,7 +35,7 @@ void Ray::AddRayToList(Ray* newRay) {
 	this->next = newRay;
 }
 
-ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in) {
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in) {
 	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
@@ -55,7 +55,7 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 	
 		Ray GetLightIntensity(pointOnObject, glm::normalize(lightRayDirection));
 
-		for (Shape* shape : shapes_in) {
+		for (Shape* shape : obstacles_in) {
 			double dotProduct = glm::dot(shape->GetNormal(), lightRayDirection);
 			if (dotProduct < 0.0) {
 				if (shape->DoesCollide(pointOnLight, lightRayDirection)) {
