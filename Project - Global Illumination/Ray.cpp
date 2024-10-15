@@ -31,8 +31,34 @@ Ray Ray::reflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersection
 
 }
 
+Ray Ray::lambertianReflection(Ray ray_in, glm::vec3 surface_normal, Material surface_material, glm::vec3 intersectionPoint) {
+	collidedMaterial = &surface_material;
+
+	surface_normal = glm::normalize(surface_normal);
+
+	// Create a rotation matrix that rotates 'angle' radians around 'axis'
+	float randomAngle = -90.0f + (static_cast<float>(rand()) / RAND_MAX) * 180.0f;
+
+	glm::mat4 rotationMatrix = glm::rotate(glm::mat4x4(1.0f), randomAngle, surface_normal);
+
+	// Transform the vector by the rotation matrix
+	glm::vec4 rotatedVec = rotationMatrix * glm::vec4(surface_normal, 1.0f);
+
+	glm::vec3 d_o = glm::vec3(rotatedVec);
+
+	Ray* reflected_ray = new Ray(d_o, intersectionPoint);
+	AddRayToList(reflected_ray);
+	// Material new_mat = mat;
+
+	return *reflected_ray;
+
+
+}
+
 void Ray::AddRayToList(Ray* newRay) {
+	newRay->head = this->head;
 	this->next = newRay;
+	head->pathLength++;
 }
 
 ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in) {
@@ -88,7 +114,7 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 
 	}
 
-		double luminance = ((area * 10.0f) / ((float)M_PI * raysAmount)) * sumResult;
+		double luminance = ((area * 100.0f) / ((float)M_PI * raysAmount)) * sumResult;
 		shadowIntensity += ColorDBL(luminance, luminance, luminance);
 
 		return ColorDBL(luminance, luminance, luminance);

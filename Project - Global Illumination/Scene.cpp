@@ -19,7 +19,7 @@ int main()
 	std::vector<Rectangle> rectangles = defineRectangles();
 	std::vector<Triangle> triangles = defineTriangles();
 
-	Light LightSource(glm::vec3(0.0, 2.0, 5.0), glm::vec3(5.0, 2.0, 5.0), glm::vec3(5.0, -2.0, 5.0), glm::vec3(0.0, -2.0, 5.0), Material(ColorDBL(1.0, 1.0, 1.0), false, true));
+	Light LightSource(glm::vec3(0.0, 2.0, 5.0), glm::vec3(5.0, 2.0, 5.0), glm::vec3(5.0, -2.0, 5.0), glm::vec3(0.0, -2.0, 5.0), Material(ColorDBL(1.0, 1.0, 1.0), "light"));
 	room.push_back(&LightSource);
 
 	for (Rectangle& rectangle : rectangles) {

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <glm/glm.hpp>
 
 
 class ColorDBL {
@@ -16,9 +17,16 @@ public:
 	//Contructor to choose color
 	ColorDBL(double red, double green, double blue) : r(red), g(green), b(blue) {};
 
+	ColorDBL(glm::vec3 colors_in) : r(colors_in.x), g(colors_in.y), b(colors_in.z) {};
+
 	std::vector<double> getColor() {
 
 		return std::vector<double> {r, g, b};
+	};
+
+	glm::vec3 getColorGlm() {
+
+		return glm::vec3(r, g, b);
 	};
 
 	static void displayColor(std::vector<double> n){
@@ -35,9 +43,9 @@ public:
 	}
 
 	ColorDBL ClampColors() {
-		r = std::clamp(r, 0.0, 1.0);
-		g = std::clamp(g, 0.0, 1.0);
-		b = std::clamp(b, 0.0, 1.0);
+		r = std::clamp(r, +0.0, 1.0);
+		g = std::clamp(g, +0.0, 1.0);
+		b = std::clamp(b, +0.0, 1.0);
 
 		return *this;
 	}

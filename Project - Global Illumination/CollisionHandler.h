@@ -44,10 +44,38 @@ public:
 
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective()) {
-
 			mat = GetMirrorMaterial(scene_shapes, ray_in, normal, intersectionPoint, scene_lightsource, scene_spheres);
 			// ray_in.PrintRayPath();
+		}
 
+		// Calculate the color of a Lambertian material
+		if (mat.checkIsLambertian()) {
+			// Nuvarande mechanic så att en ray studsar MAX 3 gånger
+			if (ray_in.getPathLength() <= 3) {
+				Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
+				Material newMat = GetCollidingMaterial(ray);
+				ColorDBL newColor = (mat.getColor()).MultiplyColor(newMat.getColor());
+				mat.changeColor(newColor);
+			}
+			/*else {
+				glm::vec3 colors(0.0f, 0.0f, 0.0f);
+				float amountMaterials = 0.0f;
+				Ray* currentRay = ray_in.getPathStart();
+				
+				while (currentRay != nullptr && currentRay->next != nullptr) {
+					auto material = currentRay->getCollidedMaterial();
+					if (material) {
+						colors += material->getColor().getColorGlm();
+						amountMaterials++;
+					}
+					currentRay = currentRay->next;
+				}
+
+				if(amountMaterials > 0.0) {
+					colors = colors / static_cast<float>(amountMaterials);
+					mat.changeColor(ColorDBL(colors));
+				}
+			}*/
 		}
 
 		return mat;

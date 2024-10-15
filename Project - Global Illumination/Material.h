@@ -12,9 +12,17 @@ class Material {
 public:
 	Material() : color(ColorDBL()), isReflective( false ), isLightSource( false ) {};
 
-	Material(ColorDBL color_in, bool isReflective_in) : color(color_in), isReflective(isReflective_in){};
-	
-	Material(ColorDBL color_in, bool isReflective_in, bool isLightSource_in) : color(color_in), isReflective(isReflective_in), isLightSource(isLightSource_in) {};
+	Material(ColorDBL color_in, std::string materialType) : color(color_in) {
+		if (materialType == "mirror") {
+			isReflective = true;
+		}
+		else if (materialType == "light") {
+			isLightSource = true;
+		}
+		else if (materialType == "lambertian") {
+			isLambertian = true;
+		}
+	};
 
 	ColorDBL getColor() const {
 		return color;
@@ -33,9 +41,14 @@ public:
 		return isLightSource;
 	};
 
+	bool checkIsLambertian() const {
+		return isLambertian;
+	};
+
 private:
 	ColorDBL color;
 	bool isReflective = false;
 	bool isLightSource = false;
+	bool isLambertian = false;
 
 };
