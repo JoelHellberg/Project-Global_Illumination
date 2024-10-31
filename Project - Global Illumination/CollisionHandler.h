@@ -25,7 +25,7 @@ public:
 	}
 
 	// Function that returns the material of the shape that a ray collides with
-	Material GetCollidingMaterial(Ray ray_in) {
+	Material GetCollidingMaterial(Ray ray_in, ColorDBL importance) {
 		glm::vec3 intersectionPoint = { 0, 0, 0 };
 		glm::vec3 normal = { 0,0,0 };
 		double distance = std::numeric_limits<double>::max();
@@ -38,23 +38,31 @@ public:
 		// Apply lightning
 		if(!mat.checkIsLightSource()) {
 			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, 10, intersectionPoint, scene_obstacles, scene_spheres);
-			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity);
+			mat.changeLuminance(intensity);
+			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity).ClampColors();
 			mat.changeColor(newColor);
 		}
 
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective()) {
-			mat = GetMirrorMaterial(scene_shapes, ray_in, normal, intersectionPoint, scene_lightsource, scene_spheres);
+			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
+			Material newMat = GetCollidingMaterial(ray, importance);
+			mat.changeColor(newMat.getColor());
 			// ray_in.PrintRayPath();
 		}
 
-		// Calculate the color of a Lambertian material
+		 // Calculate the color of a Lambertian material
 		if (mat.checkIsLambertian()) {
 			// Nuvarande mechanic så att en ray studsar MAX 3 gånger
-			if (ray_in.getPathLength() <= 3) {
+			if (ray_in.getPathLength() <= 5) {
 				Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-				Material newMat = GetCollidingMaterial(ray);
-				ColorDBL newColor = (mat.getColor()).MultiplyColor(newMat.getColor());
+				Material newMat = GetCollidingMaterial(ray, importance.MultiplyColor(mat.getColor()));
+
+				ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(0.2));
+				mat.changeColor(newColor);
+			}
+			else {
+				ColorDBL newColor = (mat.getColor()).MultiplyColor(importance);
 				mat.changeColor(newColor);
 			}
 			/*else {
@@ -127,10 +135,10 @@ private:
 	}
 
 	// Function that returns the material of a ray within a mirror
-	Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray& ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in, Light lightSource, std::vector<Sphere> spheres_in) {
-		Ray ray = ray_in.reflection(ray_in, normal_in, intersectionPoint_in);
-		Material mat = GetCollidingMaterial(ray);
-		return mat;
-	}
+	//Material GetMirrorMaterial(std::vector<Shape*> shapes_in, Ray& ray_in, glm::vec3 normal_in, glm::vec3 intersectionPoint_in, Light lightSource, std::vector<Sphere> spheres_in) {
+	//	Ray ray = ray_in.reflection(ray_in, normal_in, intersectionPoint_in);
+	//	Material mat = GetCollidingMaterial(ray, );
+	//	return mat;
+	//}
 };
 // TODO: Reference additional headers your program requires here.

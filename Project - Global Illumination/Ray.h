@@ -26,7 +26,6 @@ public:
 	Ray* next;
 
 	Ray(double i, double j, double delta) {
-		srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 		ps = glm::vec3(-1.0, 0.0, 0.0); // Position of the eye
 		glm::vec3 pe = glm::vec3(0.0, i * delta - (1.0 - delta), j * delta - (1.0 - delta)); // Position of the specific pixel
 		rayDirection = glm::normalize(pe - ps);
@@ -35,7 +34,6 @@ public:
 	};
 
 	Ray( glm::vec3 do_in, glm::vec3 ps_in ) {
-		srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
 		ps = ps_in;
 		rayDirection = glm::normalize(do_in);
 		next = nullptr;

@@ -12,7 +12,7 @@
 class ColorDBL {
 public:
 	//Default contructor, RGB = (0,0,0) -> Black
-	ColorDBL() : r(0.0), g (0.0), b(0.0){};
+	ColorDBL() : r(1.0), g (1.0), b(1.0){};
 
 	//Contructor to choose color
 	ColorDBL(double red, double green, double blue) : r(red), g(green), b(blue) {};
@@ -42,10 +42,18 @@ public:
 		return *this;
 	}
 
+	ColorDBL AddColor(ColorDBL color1) {
+		r += color1.r;
+		g += color1.g;
+		b += color1.b;
+
+		return *this;
+	}
+
 	ColorDBL ClampColors() {
-		r = std::clamp(r, +0.0, 1.0);
-		g = std::clamp(g, +0.0, 1.0);
-		b = std::clamp(b, +0.0, 1.0);
+		r = std::clamp(r, 0.01, 1.0);
+		g = std::clamp(g, 0.01, 1.0);
+		b = std::clamp(b, 0.01, 1.0);
 
 		return *this;
 	}
@@ -55,6 +63,10 @@ public:
 			return ColorDBL(1, 1, 1);
 		}
 		return ColorDBL(r / divider, g / divider, b / divider);
+	}
+
+	ColorDBL mult(double multiplier) const {
+		return ColorDBL(r * multiplier, g * multiplier, b * multiplier);
 	}
 
 	ColorDBL& operator+=(const ColorDBL& other) {

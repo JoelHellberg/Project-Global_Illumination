@@ -10,7 +10,7 @@
 class Material {
 
 public:
-	Material() : color(ColorDBL()), isReflective( false ), isLightSource( false ) {};
+	Material() : color(ColorDBL()), luminance(ColorDBL(1.0,1.0,1.0)), isReflective( false ), isLightSource( false ) {};
 
 	Material(ColorDBL color_in, std::string materialType) : color(color_in) {
 		if (materialType == "mirror") {
@@ -33,6 +33,15 @@ public:
 		return color;
 	};
 
+	ColorDBL getLuminance() const {
+		return luminance;
+	};
+
+	ColorDBL changeLuminance(ColorDBL newLuminance) {
+		luminance = newLuminance;
+		return luminance;
+	};
+
 	bool checkIsReflective() const {
 		return isReflective;
 	};
@@ -47,6 +56,7 @@ public:
 
 private:
 	ColorDBL color;
+	ColorDBL luminance;
 	bool isReflective = false;
 	bool isLightSource = false;
 	bool isLambertian = false;
