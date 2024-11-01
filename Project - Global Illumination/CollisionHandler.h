@@ -47,7 +47,7 @@ public:
 		if (mat.checkIsReflective()) {
 			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
 			Material newMat = GetCollidingMaterial(ray);
-			mat.changeColor(newMat.getColor());
+			mat.changeColor(newMat.getColor().mult(0.8));
 			// ray_in.PrintRayPath();
 		}
 
@@ -55,17 +55,23 @@ public:
 		if (mat.checkIsLambertian()) {
 
 			int maxBounces = 5;
-			double absorbtionFactor = 0.2;
+			double absorbtionFactor = 0.5;
 			double absorbtionChance = 1 - absorbtionFactor;
 			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
 
 			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
 			if (randomFactor < absorbtionChance && ray_in.getPathLength() <= maxBounces) {
-				Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-				Material newMat = GetCollidingMaterial(ray);
+				int renderAmounts = 5;
+				ColorDBL leanColor;
+				for(int i = 0; i < renderAmounts; i++) {
+					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
+					Material newMat = GetCollidingMaterial(ray);
 
-				ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(absorbtionFactor));
-				mat.changeColor(newColor);
+					ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(absorbtionFactor));
+					leanColor = leanColor.AddColor(newColor);
+				}
+				leanColor = leanColor.divide(renderAmounts);
+				mat.changeColor(leanColor);
 			}
 			else {
 				mat.changeColor(mat.getColor());

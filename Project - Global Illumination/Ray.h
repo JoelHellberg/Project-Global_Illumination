@@ -42,7 +42,7 @@ public:
 
 	Ray reflection(Ray ray_in, glm::vec3 N, glm::vec3 intersectionPoint);
 
-	Ray lambertianReflection(Ray ray_in, glm::vec3 N, Material surface_material, glm::vec3 intersectionPoint);
+	Ray lambertianReflection(Ray ray_in, glm::vec3 N, glm::vec3 intersectionPoint);
 
 	glm::vec3 GetRayDirection() {
 		return rayDirection;

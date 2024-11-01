@@ -31,27 +31,33 @@ Ray Ray::reflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersection
 
 }
 
-Ray Ray::lambertianReflection(Ray ray_in, glm::vec3 surface_normal, Material surface_material, glm::vec3 intersectionPoint) {
-	collidedMaterial = &surface_material;
+Ray Ray::lambertianReflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersectionPoint) {
+	// Step 1: Generate random angles for azimuthal and polar within ±90 degrees (in radians)
+	float max = M_PI / 2.0;
+	float min = -max;
+    float theta = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min))); // Azimuthal angle
+    float phi = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));   // Polar angle
 
-	surface_normal = glm::normalize(surface_normal);
+    // Step 2: Convert spherical coordinates to Cartesian coordinates in the local frame
+    float x = cos(phi) * sin(theta);
+    float y = sin(phi);
+    float z = cos(phi) * cos(theta);
 
-	// Create a rotation matrix that rotates 'angle' radians around 'axis'
-	float randomAngle = -90.0f + (static_cast<float>(rand()) / RAND_MAX) * 180.0f;
+    // Step 3: Create an orthonormal basis from the normal
+    glm::vec3 tangent, bitangent;
+	// Pick an arbitrary vector to create the basis
+	glm::vec3 up = std::fabs(surface_normal.z) < 0.999 ? glm::vec3(0.0, 0.0, 1.0) : glm::vec3(1.0, 0.0, 0.0);
+	tangent = glm::normalize(glm::cross(up, surface_normal));
+	bitangent = glm::normalize(glm::cross(surface_normal, tangent));
 
-	glm::mat4 rotationMatrix = glm::rotate(glm::mat4x4(1.0f), randomAngle, surface_normal);
-
-	// Transform the vector by the rotation matrix
-	glm::vec4 rotatedVec = rotationMatrix * glm::vec4(surface_normal, 1.0f);
-
-	glm::vec3 d_o = glm::vec3(rotatedVec);
+    // Step 4: Transform local direction to world space
+	glm::vec3 d_o = glm::vec3(x * tangent + y * bitangent + z * surface_normal);
 
 	Ray* reflected_ray = new Ray(d_o, intersectionPoint);
 	AddRayToList(reflected_ray);
 	// Material new_mat = mat;
 
 	return *reflected_ray;
-
 
 }
 
