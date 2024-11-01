@@ -25,7 +25,7 @@ public:
 	}
 
 	// Function that returns the material of the shape that a ray collides with
-	Material GetCollidingMaterial(Ray ray_in, ColorDBL importance) {
+	Material GetCollidingMaterial(Ray ray_in) {
 		glm::vec3 intersectionPoint = { 0, 0, 0 };
 		glm::vec3 normal = { 0,0,0 };
 		double distance = std::numeric_limits<double>::max();
@@ -46,24 +46,29 @@ public:
 		// Calculate the color within a mirror
 		if (mat.checkIsReflective()) {
 			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-			Material newMat = GetCollidingMaterial(ray, importance);
+			Material newMat = GetCollidingMaterial(ray);
 			mat.changeColor(newMat.getColor());
 			// ray_in.PrintRayPath();
 		}
 
 		 // Calculate the color of a Lambertian material
 		if (mat.checkIsLambertian()) {
-			// Nuvarande mechanic så att en ray studsar MAX 3 gånger
-			if (ray_in.getPathLength() <= 5) {
-				Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-				Material newMat = GetCollidingMaterial(ray, importance.MultiplyColor(mat.getColor()));
 
-				ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(0.2));
+			int maxBounces = 5;
+			double absorbtionFactor = 0.2;
+			double absorbtionChance = 1 - absorbtionFactor;
+			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
+
+			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
+			if (randomFactor < absorbtionChance && ray_in.getPathLength() <= maxBounces) {
+				Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
+				Material newMat = GetCollidingMaterial(ray);
+
+				ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(absorbtionFactor));
 				mat.changeColor(newColor);
 			}
 			else {
-				ColorDBL newColor = (mat.getColor()).MultiplyColor(importance);
-				mat.changeColor(newColor);
+				mat.changeColor(mat.getColor());
 			}
 			/*else {
 				glm::vec3 colors(0.0f, 0.0f, 0.0f);

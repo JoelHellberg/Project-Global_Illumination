@@ -71,7 +71,7 @@ int main()
 
 					Ray ray = myCamera.GetRay(j, i);
 
-					Material mat = myCollisionHandler.GetCollidingMaterial(ray, ColorDBL(1.0, 1.0, 1.0));
+					Material mat = myCollisionHandler.GetCollidingMaterial(ray);
 
 					/*LightSource.RandomPointOnLight();*/
 
