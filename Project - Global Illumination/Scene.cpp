@@ -3,6 +3,12 @@
 
 #include "Scene.h"
 #include <ppl.h>
+#include <vector>
+#include <iostream>
+#include <thread>
+#include <queue>
+#include <mutex>
+#include <concurrent_vector.h> // Include for concurrency::parallel_for, if needed
 
 
 //Print all color in a column
@@ -48,10 +54,11 @@ int main()
 	std::vector<Sphere> spheres = defineSphere();
 
 
-
-
-	//Dimension of the output image
-	double dimensions = 600.0;
+	// Dimension of the output image
+	size_t dimensions = 800.0;
+	// Factors that influence the detail of sharpness of the render
+	int noSamples = 120;
+	int maxDepth = 5;
 
 	// Define the Camera
 	Camera myCamera = Camera(dimensions, dimensions);
@@ -61,36 +68,56 @@ int main()
 	std::cout << " " << dimensions << " " << " " << dimensions << " " << "\n"; //Dimensions for the image
 	std::cout << "255" << "\n"; //Define that RGB is used
 
-	int number_of_reflections = 0;
-	CollisionHandler myCollisionHandler(room, obstacles, spheres, LightSource);
-	std::vector<std::vector<double>> pixelColors;
+	CollisionHandler myCollisionHandler(room, obstacles, spheres, LightSource, noSamples, maxDepth);
 
-	// concurrency::parallel_for(size_t(0), (size_t)dimensions, [&](size_t j) {
-			for (double i = dimensions - 1.0; i >= 0.0; i--) {
-				for (double j = dimensions - 1.0; j >= 0.0; j--) {
+	size_t totalPixels = dimensions * dimensions;
+	std::vector<std::vector<double>> pixelColors(totalPixels, { 0.0, 0.0, 0.0 });
 
-					Ray ray = myCamera.GetRay(j, i);
+	std::queue<std::pair<size_t, size_t>> tasks; // Queue for pixel tasks
+	std::mutex queueMutex; // Mutex for thread-safe access to the queue
 
-					Material mat = myCollisionHandler.GetCollidingMaterial(ray);
+	// Enqueue pixel tasks
+	for (size_t j = 0; j < dimensions; ++j) {
+		for (size_t i = 0; i < dimensions; ++i) {
+			tasks.push({ j, i });
+		}
+	}
 
-					/*LightSource.RandomPointOnLight();*/
-
-
-					/*std::cout << "Area: " << LightSource.GetArea();*/
-
-
-					// Clamp the colors
-					mat.changeColor(mat.getColor().ClampColors());
-					// Print the color of the wall where collision was detected
-					printColor(mat.getColor().getColor());
-					//pixelColors.push_back(mat.getColor().getColor());
+	concurrency::parallel_for(size_t(0), (size_t)std::thread::hardware_concurrency(), [&](size_t) {
+		while (true) {
+			std::pair<size_t, size_t> task;
+			{
+				std::lock_guard<std::mutex> lock(queueMutex);
+				if (tasks.empty()) {
+					break; // Exit loop if no tasks are left
 				}
+				task = tasks.front();
+				tasks.pop();
 			}
-		//});
 
-	//for (std::vector<double> color : pixelColors) {
-	//	printColor(color);
-	//}
+			size_t j = task.first;
+			size_t i = task.second;
+			Ray ray = myCamera.GetRay(j, i);
+			Material mat = myCollisionHandler.GetCollidingMaterial(ray);
+
+			// Clamp the colors
+			mat.changeColor(mat.getColor().ClampColors());
+
+			// Calculate 1D index based on 2D coordinates (i, j)
+			size_t index = j * dimensions + i;
+
+			// Ensure safe access to pixelColors
+			pixelColors[index] = mat.getColor().getColor();
+
+			// Introduce a short pause to reduce CPU usage
+			std::this_thread::sleep_for(std::chrono::microseconds(1000)); // Adjust as necessary
+		}
+		});
+
+	for (const std::vector<double>& color : pixelColors) {
+		printColor(color);
+	}
+
 
 	return 0;
 

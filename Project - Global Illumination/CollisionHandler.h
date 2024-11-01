@@ -17,8 +17,8 @@
 class CollisionHandler {
 public:
 
-	CollisionHandler(std::vector<Shape*> room_in, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, Light lightSource)
-	: scene_shapes(room_in), scene_obstacles(obstacles_in), scene_spheres(spheres_in), scene_lightsource(lightSource) {	
+	CollisionHandler(std::vector<Shape*> room_in, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, Light lightSource, int noSamples_in, int maxDepth_in)
+	: scene_shapes(room_in), scene_obstacles(obstacles_in), scene_spheres(spheres_in), scene_lightsource(lightSource), noSamples(noSamples_in), maxDepth(maxDepth_in){
 		for (Shape* obstacle : obstacles_in) {
 			scene_shapes.push_back(obstacle);
 		}
@@ -37,7 +37,7 @@ public:
 
 		// Apply lightning
 		if(!mat.checkIsLightSource()) {
-			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, 10, intersectionPoint, scene_obstacles, scene_spheres);
+			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, noSamples, intersectionPoint, scene_obstacles, scene_spheres);
 			mat.changeLuminance(intensity);
 			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity).ClampColors();
 			mat.changeColor(newColor);
@@ -54,47 +54,26 @@ public:
 		 // Calculate the color of a Lambertian material
 		if (mat.checkIsLambertian()) {
 
-			int maxBounces = 5;
 			double absorbtionFactor = 0.5;
 			double absorbtionChance = 1 - absorbtionFactor;
 			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
 
 			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
-			if (randomFactor < absorbtionChance && ray_in.getPathLength() <= maxBounces) {
-				int renderAmounts = 5;
+			if (randomFactor < absorbtionChance && ray_in.getPathLength() <= maxDepth) {
 				ColorDBL leanColor;
-				for(int i = 0; i < renderAmounts; i++) {
+				for(int i = 0; i < noSamples; i++) {
 					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
 					Material newMat = GetCollidingMaterial(ray);
 
 					ColorDBL newColor = mat.getColor().AddColor(newMat.getColor().mult(absorbtionFactor));
 					leanColor = leanColor.AddColor(newColor);
 				}
-				leanColor = leanColor.divide(renderAmounts);
+				leanColor = leanColor.divide(noSamples);
 				mat.changeColor(leanColor);
 			}
 			else {
 				mat.changeColor(mat.getColor());
 			}
-			/*else {
-				glm::vec3 colors(0.0f, 0.0f, 0.0f);
-				float amountMaterials = 0.0f;
-				Ray* currentRay = ray_in.getPathStart();
-				
-				while (currentRay != nullptr && currentRay->next != nullptr) {
-					auto material = currentRay->getCollidedMaterial();
-					if (material) {
-						colors += material->getColor().getColorGlm();
-						amountMaterials++;
-					}
-					currentRay = currentRay->next;
-				}
-
-				if(amountMaterials > 0.0) {
-					colors = colors / static_cast<float>(amountMaterials);
-					mat.changeColor(ColorDBL(colors));
-				}
-			}*/
 		}
 
 		return mat;
@@ -104,6 +83,8 @@ private:
 	std::vector<Shape*> scene_obstacles;
 	std::vector<Sphere> scene_spheres;
 	Light scene_lightsource;
+	int noSamples;
+	int maxDepth;
 
 	void GetCollidingMaterialPolygon(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
