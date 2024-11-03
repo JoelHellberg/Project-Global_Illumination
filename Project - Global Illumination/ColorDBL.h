@@ -12,7 +12,7 @@
 class ColorDBL {
 public:
 	//Default contructor, RGB = (0,0,0) -> Black
-	ColorDBL() : r(1.0), g (1.0), b(1.0){};
+	ColorDBL() : r(0.0), g (0.0), b(0.0){};
 
 	//Contructor to choose color
 	ColorDBL(double red, double green, double blue) : r(red), g(green), b(blue) {};

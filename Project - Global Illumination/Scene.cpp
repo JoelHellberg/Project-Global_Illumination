@@ -57,7 +57,7 @@ int main()
 	// Dimension of the output image
 	size_t dimensions = 800.0;
 	// Factors that influence the detail of sharpness of the render
-	int noSamples = 120;
+	int noSamples = 60;
 	int maxDepth = 5;
 
 	// Define the Camera
@@ -98,16 +98,22 @@ int main()
 			size_t j = task.first;
 			size_t i = task.second;
 			Ray ray = myCamera.GetRay(j, i);
-			Material mat = myCollisionHandler.GetCollidingMaterial(ray);
+
+			ColorDBL leanColor;
+			for (int i = 0; i < noSamples; i++) {
+				Material mat = myCollisionHandler.GetCollidingMaterial(ray);
+				leanColor = leanColor.AddColor(mat.getColor());
+			}
+			leanColor = leanColor.divide(noSamples);
 
 			// Clamp the colors
-			mat.changeColor(mat.getColor().ClampColors());
+			leanColor = leanColor.ClampColors();
 
 			// Calculate 1D index based on 2D coordinates (i, j)
 			size_t index = j * dimensions + i;
 
 			// Ensure safe access to pixelColors
-			pixelColors[index] = mat.getColor().getColor();
+			pixelColors[index] = leanColor.getColor();
 
 			// Introduce a short pause to reduce CPU usage
 			std::this_thread::sleep_for(std::chrono::microseconds(1000)); // Adjust as necessary
