@@ -30,6 +30,7 @@ file(GLOB SOURCES
     "Light.cpp"
     "Sphere.h"
     "Sphere.cpp"
+    "CpuManagement.h"
 )
 add_executable(CMakeTarget ${SOURCES})
 
