@@ -15,10 +15,18 @@ public:
     /*Sphere() = default;*/
 
     Sphere(const double r, const glm::vec3 center_in, Material material) {
+        spheresAmount++;
+        // Make the id negative to seperate the Spheres from the polygons
+        shapeId = -spheresAmount;
+
         radius = r;
         center = center_in;
         Spherematerial = material;
 
+    }
+
+    int getShapeID() {
+        return shapeId;
     }
 
     //glm::vec3 GetNormal() const override {
@@ -57,6 +65,8 @@ public:
     bool DoesCollide(glm::vec3 rayDirection, glm::vec3 ps_in);
 
 private:
+    static inline int spheresAmount = 0;
+    int shapeId;
 
     double radius;
     glm::vec3 center;

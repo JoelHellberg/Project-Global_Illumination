@@ -54,7 +54,7 @@ public:
 
 	void AddRayToList(Ray* newRay);
 
-	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in);
+	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in, int shapeId);
 
 	void PrintRayPath() {
 		Ray* ptr = this;

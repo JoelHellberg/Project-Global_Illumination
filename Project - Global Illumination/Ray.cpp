@@ -67,7 +67,7 @@ void Ray::AddRayToList(Ray* newRay) {
 	head->pathLength++;
 }
 
-ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in) {
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, int shapeId) {
 	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
@@ -88,25 +88,29 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 		Ray GetLightIntensity(pointOnObject, glm::normalize(lightRayDirection));
 
 		for (Shape* shape : obstacles_in) {
-			double dotProduct = glm::dot(shape->GetNormal(), lightRayDirection);
-			if (dotProduct < 0.0) {
-				if (shape->DoesCollide(pointOnLight, lightRayDirection)) {
-					glm::vec3 intersectionPointNew = shape->GetIntersectionPoint(pointOnLight, lightRayDirection);
-					if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
-						hitsObject = false;
-						break;
+			if(shape->getShapeID() != shapeId) {
+				double dotProduct = glm::dot(shape->GetNormal(), lightRayDirection);
+				if (dotProduct < 0.0) {
+					if (shape->DoesCollide(pointOnLight, lightRayDirection)) {
+						glm::vec3 intersectionPointNew = shape->GetIntersectionPoint(pointOnLight, lightRayDirection);
+						if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
+							hitsObject = false;
+							break;
+						}
 					}
-				}
+			}
 			}
 		}
 
 		for (Sphere& sphere : spheres_in) {
-			if (sphere.DoesCollide(lightRayDirection, pointOnLight)) {
-				glm::vec3 intersectionPointNew = sphere.GetIntersectionPoint(lightRayDirection, pointOnLight);
-				// Find the object that is closest to the ray's starting position
-				if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
-					hitsObject = false;
-					break;
+			if (sphere.getShapeID() != shapeId) {
+				if (sphere.DoesCollide(lightRayDirection, pointOnLight)) {
+					glm::vec3 intersectionPointNew = sphere.GetIntersectionPoint(lightRayDirection, pointOnLight);
+					// Find the object that is closest to the ray's starting position
+					if (glm::distance(pointOnLight, intersectionPointNew) < glm::distance(pointOnLight, intersectionPoint)) {
+						hitsObject = false;
+						break;
+					}
 				}
 			}
 		}

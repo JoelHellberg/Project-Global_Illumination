@@ -12,6 +12,11 @@
 // TODO: Reference additional headers your program requires here.
 class Shape {
 public:
+	Shape() { shapeAmount++; shapeId = shapeAmount; }
+
+	int getShapeID() {
+		return shapeId;
+	}
 
 	virtual glm::vec3 GetNormal() const = 0;
 
@@ -27,4 +32,7 @@ public:
 	virtual ~Shape() {
 		// std::cout << "Shape destroyed\n";
 	}
+private:
+	static inline int shapeAmount = 0;
+	int shapeId;
 };

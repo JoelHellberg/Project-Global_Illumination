@@ -32,12 +32,13 @@ public:
 		Material mat = Material();
 
 		// Find the objects ("shape") that the ray collides with
-		GetCollidingMaterialPolygon(ray_in, distance, intersectionPoint, mat, normal);
-		GetCollidingMaterialSphere(ray_in, distance, intersectionPoint, mat, normal);
+		int objectId = 0;
+		objectId = GetCollidingMaterialPolygon(ray_in, distance, intersectionPoint, mat, normal);
+		objectId = GetCollidingMaterialSphere(ray_in, distance, intersectionPoint, mat, normal);
 
 		// Apply lightning
 		if(!mat.checkIsLightSource()) {
-			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, noSamples, intersectionPoint, scene_obstacles, scene_spheres);
+			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, noSamples, intersectionPoint, scene_obstacles, scene_spheres, objectId);
 			mat.changeLuminance(intensity);
 			ColorDBL newColor = (mat.getColor()).MultiplyColor(intensity).ClampColors();
 			mat.changeColor(newColor);
@@ -81,9 +82,10 @@ private:
 	int noSamples;
 	int maxDepth;
 
-	void GetCollidingMaterialPolygon(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal) {
+	int GetCollidingMaterialPolygon(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
+		int objectId = 0;
 		
 		// Find the objects ("shape") that the ray collides with
 		for (Shape* shape : scene_shapes) {
@@ -95,17 +97,20 @@ private:
 					if (distance > glm::distance(rayStartPos, intersectionPoint)) {
 						finalIntersectionPoint = intersectionPoint;
 						distance = glm::distance(rayStartPos, intersectionPoint);
+						objectId = shape->getShapeID();
 						mat = shape->GetMaterial();
 						normal = shape->GetNormal();
 					}
 				}
 			}
 		}
+		return objectId;
 	}
 
-	void GetCollidingMaterialSphere(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal) {
+	int GetCollidingMaterialSphere(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
+		int objectId = 0;
 		
 		for (Sphere& sphere : scene_spheres) {
 			if (sphere.DoesCollide(rayDirection, rayStartPos)) {
@@ -114,11 +119,13 @@ private:
 				if (distance > glm::distance(rayStartPos, intersectionPoint)) {
 					finalIntersectionPoint = intersectionPoint;
 					distance = glm::distance(rayStartPos, intersectionPoint);
+					objectId = sphere.getShapeID();
 					mat = sphere.GetMaterial();
 					normal = sphere.CalculateNormal(rayDirection, rayStartPos);
 				}
 			}
 		}
+		return objectId;
 	}
 
 	// Function that returns the material of a ray within a mirror

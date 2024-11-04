@@ -57,7 +57,7 @@ int main()
 	// Dimension of the output image
 	size_t dimensions = 800.0;
 	// Factors that influence the detail of sharpness of the render
-	int noSamples = 60;
+	int noSamples = 5;
 	int maxDepth = 5;
 
 	// Define the Camera
@@ -116,7 +116,7 @@ int main()
 			pixelColors[index] = leanColor.getColor();
 
 			// Introduce a short pause to reduce CPU usage
-			std::this_thread::sleep_for(std::chrono::microseconds(1000)); // Adjust as necessary
+			std::this_thread::sleep_for(std::chrono::microseconds(2)); // Adjust as necessary
 		}
 		});
 
