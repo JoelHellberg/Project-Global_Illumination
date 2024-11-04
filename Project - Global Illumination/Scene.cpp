@@ -58,7 +58,7 @@ int main()
 	// Dimension of the output image
 	size_t dimensions = 800.0;
 	// Factors that influence the detail of sharpness of the render
-	int noSamples = 30;
+	int noSamples = 5;
 	int maxDepth = 5;
 
 	// Define the Camera
@@ -84,49 +84,12 @@ int main()
 		}
 	}
 
-	//concurrency::parallel_for(size_t(0), (size_t)std::thread::hardware_concurrency(), [&](size_t) {
-	//	while (true) {
-	//		std::pair<size_t, size_t> task;
-	//		{
-	//			std::lock_guard<std::mutex> lock(queueMutex);
-	//			if (tasks.empty()) {
-	//				break; // Exit loop if no tasks are left
-	//			}
-	//			task = tasks.front();
-	//			tasks.pop();
-	//		}
-
-	//		size_t j = task.first;
-	//		size_t i = task.second;
-	//		Ray ray = myCamera.GetRay(j, i);
-
-	//		ColorDBL leanColor;
-	//		for (int i = 0; i < noSamples; i++) {
-	//			Material mat = myCollisionHandler.GetCollidingMaterial(ray);
-	//			leanColor = leanColor.AddColor(mat.getColor());
-	//		}
-	//		leanColor = leanColor.divide(noSamples);
-
-	//		// Clamp the colors
-	//		leanColor = leanColor.ClampColors();
-
-	//		// Calculate 1D index based on 2D coordinates (i, j)
-	//		size_t index = j * dimensions + i;
-
-	//		// Ensure safe access to pixelColors
-	//		pixelColors[index] = leanColor.getColor();
-
-	//		// Introduce a short pause to reduce CPU usage
-	//		std::this_thread::sleep_for(std::chrono::microseconds(2)); // Adjust as necessary
-	//	}
-	//	});
-
 	concurrency::parallel_for(size_t(0), dimensions, [&](size_t j) {
 		for (size_t i = 0; i < dimensions; i++) {
 			// Check CPU usage and pause if above 80%
 			CpuManagement::WaitForCpuBelowThreshold(80.0);
 
-			Ray ray = myCamera.GetRay(j, i);
+			Ray ray = myCamera.GetRay(i, j);
 
 			ColorDBL leanColor;
 			for (int i = 0; i < noSamples; i++) {
