@@ -58,7 +58,7 @@ int main()
 	// Dimension of the output image
 	size_t dimensions = 800.0;
 	// Factors that influence the detail of sharpness of the render
-	int noSamples = 5;
+	double noSamples = 5.0;
 	int maxDepth = 5;
 
 	// Define the Camera
@@ -91,15 +91,22 @@ int main()
 
 			Ray ray = myCamera.GetRay(i, j);
 
-			ColorDBL leanColor;
+			ColorDBL leanColor(0.0, 0.0, 0.0);
 			for (int i = 0; i < noSamples; i++) {
 				Material mat = myCollisionHandler.GetCollidingMaterial(ray);
-				leanColor = leanColor.AddColor(mat.getColor());
+				ColorDBL matColor = glm::pow(mat.getColor().getColorGlm(), glm::vec3(2.2)); // Linearize the color
+				leanColor += matColor;  // Accumulate the color
 			}
-			leanColor = leanColor.divide(noSamples);
+
+			// Average the colors after the loop
+			leanColor = leanColor / noSamples;
+
+			// Apply gamma correction to the averaged color
+			leanColor = glm::pow(leanColor.getColorGlm(), glm::vec3(1.0 / 2.2));
 
 			// Clamp the colors
 			leanColor = leanColor.ClampColors();
+
 
 			// Calculate 1D index based on 2D coordinates (i, j)
 			size_t index = j * dimensions + i;

@@ -67,7 +67,7 @@ void Ray::AddRayToList(Ray* newRay) {
 	head->pathLength++;
 }
 
-ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, int shapeId) {
+ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, double raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, int shapeId) {
 	glm::vec3 surfaceNormal = normal;
 	glm::vec3 LightSourceNormal(0.0, 0.0, -1.0);
 
@@ -124,7 +124,7 @@ ColorDBL Ray::GetLightIntensity(glm::vec3 normal, Light lightSource, int raysAmo
 
 	}
 
-		double luminance = ((area*10) / ((float)M_PI * raysAmount)) * sumResult;
+		double luminance = ((area*20.0) / ((float)M_PI * raysAmount)) * sumResult;
 		shadowIntensity += ColorDBL(luminance, luminance, luminance);
 
 		return ColorDBL(luminance, luminance, luminance);

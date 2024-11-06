@@ -19,12 +19,12 @@ public:
 
 	ColorDBL(glm::vec3 colors_in) : r(colors_in.x), g(colors_in.y), b(colors_in.z) {};
 
-	std::vector<double> getColor() {
+	std::vector<double> getColor() const {
 
 		return std::vector<double> {r, g, b};
 	};
 
-	glm::vec3 getColorGlm() {
+	glm::vec3 getColorGlm() const {
 
 		return glm::vec3(r, g, b);
 	};
@@ -74,6 +74,34 @@ public:
 		g += other.g;
 		b += other.b;
 		return *this;
+	}
+
+	friend ColorDBL operator+(const ColorDBL& lhs, const ColorDBL& rhs) {
+		ColorDBL result = lhs;
+		result += rhs;
+		return result;
+	}
+
+	friend ColorDBL operator*(const ColorDBL& lhs, const ColorDBL& rhs) {
+		glm::vec3 lhsValues = lhs.getColorGlm();
+		glm::vec3 rhsValues = rhs.getColorGlm();
+		return ColorDBL(lhsValues.x * rhsValues.x, lhsValues.y * rhsValues.y, lhsValues.z * rhsValues.z);
+	}
+
+	friend ColorDBL operator*(const ColorDBL& lhs, const double& multiplyer) {
+		ColorDBL result(multiplyer, multiplyer, multiplyer);
+		return lhs * result;
+	}
+
+	friend ColorDBL operator/(const ColorDBL& lhs, const ColorDBL& rhs) {
+		glm::vec3 lhsValues = lhs.getColorGlm();
+		glm::vec3 rhsValues = rhs.getColorGlm();
+		return ColorDBL(lhsValues.x / rhsValues.x, lhsValues.y / rhsValues.y, lhsValues.z / rhsValues.z);
+	}
+
+	friend ColorDBL operator/(const ColorDBL& lhs, const double& divider) {
+		ColorDBL result(divider, divider, divider);
+		return lhs / result;
 	}
 
 

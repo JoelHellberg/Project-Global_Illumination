@@ -22,6 +22,9 @@ public:
 		else if (materialType == "lambertian") {
 			isLambertian = true;
 		}
+		else if (materialType == "metallic") {
+			isMetallic = true;
+		}
 	};
 
 	ColorDBL getColor() const {
@@ -54,11 +57,16 @@ public:
 		return isLambertian;
 	};
 
+	bool checkIsMetallic() const {
+		return isMetallic;
+	};
+
 private:
 	ColorDBL color;
 	ColorDBL luminance;
 	bool isReflective = false;
 	bool isLightSource = false;
 	bool isLambertian = false;
+	bool isMetallic = false;
 
 };
