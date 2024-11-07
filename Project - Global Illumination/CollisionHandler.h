@@ -68,15 +68,23 @@ public:
 		 // Calculate the color of a Lambertian material
 		if (mat.checkIsLambertian()) {
 
-			double absorbtionFactor = 0.5;
+			double absorbtionFactor = 0.8;
 			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
 
 			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
 			if (randomFactor > (1 - absorbtionFactor) && ray_in.getPathLength() <= maxDepth) {
 					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
-					Material newMat = GetCollidingMaterial(ray);
 
-					ColorDBL newColor = mat.getColor() + newMat.getColor() * absorbtionFactor;
+					ColorDBL reflectiveColor(0.0, 0.0, 0.0);
+					for (int i = 0; i < noSamples; i++) {
+						Material newMat = GetCollidingMaterial(ray);
+						double cosOmega = glm::dot(normal, ray.GetRayDirection()) / (glm::length(normal) * glm::length(ray.GetRayDirection()));
+						reflectiveColor += mat.getColor() * absorbtionFactor * cosOmega;  // Accumulate the color
+					}
+					// Average the colors after the loop
+					// reflectiveColor = reflectiveColor / noSamples;
+
+					ColorDBL newColor = mat.getColor() + reflectiveColor;
 					mat.changeColor(newColor);
 			}
 			else {

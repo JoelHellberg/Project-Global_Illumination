@@ -94,8 +94,7 @@ int main()
 			ColorDBL leanColor(0.0, 0.0, 0.0);
 			for (int i = 0; i < noSamples; i++) {
 				Material mat = myCollisionHandler.GetCollidingMaterial(ray);
-				ColorDBL matColor = glm::pow(mat.getColor().getColorGlm(), glm::vec3(2.2)); // Linearize the color
-				leanColor += matColor;  // Accumulate the color
+				leanColor += mat.getColor();  // Accumulate the color
 			}
 
 			// Average the colors after the loop
