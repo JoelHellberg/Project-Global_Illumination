@@ -58,7 +58,7 @@ int main()
 	// Dimension of the output image
 	size_t dimensions = 800.0;
 	// Factors that influence the detail of sharpness of the render
-	double noSamples = 5.0;
+	double noSamples = 64.0;
 	int maxDepth = 5;
 
 	// Define the Camera

@@ -2,6 +2,7 @@
 // or project specific include files.
 
 #pragma once
+#define _USE_MATH_DEFINES
 #include "Material.h"
 #include "Shape.h"
 #include "Ray.h"
@@ -52,6 +53,36 @@ public:
 			// ray_in.PrintRayPath();
 		}
 
+		 // Calculate the color of a Lambertian material
+		if (mat.checkIsLambertian() || mat.checkIsMetallic()) {
+
+			double albedo = 0.8;
+			constexpr double bsrdf = 0.8 / glm::pi<float>();
+
+			double absorptionChance = 0.2;
+			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
+
+			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
+			if (randomFactor > absorptionChance && ray_in.getPathLength() <= maxDepth) {
+					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
+
+					double cosOmega = glm::dot(normal, ray.GetRayDirection()) / (glm::length(normal) * glm::length(ray.GetRayDirection()));
+					ColorDBL reflectiveColor(0.0, 0.0, 0.0);
+					for (int i = 0; i < noSamples; i++) {
+						Material newMat = GetCollidingMaterial(ray);
+						reflectiveColor += newMat.getColor() * bsrdf * cosOmega;  // Accumulate the color
+					}
+					// Average the colors after the loop
+					// reflectiveColor = reflectiveColor / noSamples;
+
+					ColorDBL newColor = mat.getColor() + reflectiveColor;
+					mat.changeColor(newColor);
+			}
+			else {
+				mat.changeColor(mat.getColor());
+			}
+		}
+
 		if (mat.checkIsMetallic()) {
 			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
 			Material newMat = GetCollidingMaterial(ray);
@@ -63,33 +94,6 @@ public:
 			ColorDBL newColor = baseColor * (1.0f - metallicFactor) + reflectedColor * metallicFactor;
 
 			mat.changeColor(newColor);
-		}
-
-		 // Calculate the color of a Lambertian material
-		if (mat.checkIsLambertian()) {
-
-			double absorbtionFactor = 0.8;
-			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
-
-			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
-			if (randomFactor > (1 - absorbtionFactor) && ray_in.getPathLength() <= maxDepth) {
-					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
-
-					ColorDBL reflectiveColor(0.0, 0.0, 0.0);
-					for (int i = 0; i < noSamples; i++) {
-						Material newMat = GetCollidingMaterial(ray);
-						double cosOmega = glm::dot(normal, ray.GetRayDirection()) / (glm::length(normal) * glm::length(ray.GetRayDirection()));
-						reflectiveColor += mat.getColor() * absorbtionFactor * cosOmega;  // Accumulate the color
-					}
-					// Average the colors after the loop
-					// reflectiveColor = reflectiveColor / noSamples;
-
-					ColorDBL newColor = mat.getColor() + reflectiveColor;
-					mat.changeColor(newColor);
-			}
-			else {
-				mat.changeColor(mat.getColor());
-			}
 		}
 
 		return mat;
