@@ -97,27 +97,27 @@ std::vector<Triangle> defineObstaclesTriangles() {
 	std::vector<Triangle> triangles_out;
 
 	// Triangles of Tetraed
-	Triangle rightWallTetraedLeft(glm::vec3(7.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 4.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle rightWallTetraedLeft(glm::vec3(7.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 4.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(rightWallTetraedLeft);
-	Triangle rightWallTetraedRight(glm::vec3(7.0, 4.0, -3.0), glm::vec3(6.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle rightWallTetraedRight(glm::vec3(7.0, 4.0, -3.0), glm::vec3(6.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(rightWallTetraedRight);
 
 	// Egentiligen fram
-	Triangle leftWallTetraedLeft(glm::vec3(6.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 4.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle leftWallTetraedLeft(glm::vec3(6.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 4.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(leftWallTetraedLeft);
-	Triangle leftWallTetraedRight(glm::vec3(6.0, 3.0, -3.0), glm::vec3(6.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle leftWallTetraedRight(glm::vec3(6.0, 3.0, -3.0), glm::vec3(6.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(leftWallTetraedRight);
 
 	// Egentligen höger
-	Triangle frontWallTetraedLeft(glm::vec3(7.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 2.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle frontWallTetraedLeft(glm::vec3(7.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(6.0, 2.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(frontWallTetraedLeft);
-	Triangle frontWallTetraedRight(glm::vec3(7.0, 2.0, -3.0), glm::vec3(8.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle frontWallTetraedRight(glm::vec3(7.0, 2.0, -3.0), glm::vec3(8.0, 2.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(frontWallTetraedRight);
 
 	// Egentligen bakifrån
-	Triangle backWallTetraedLeft(glm::vec3(8.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 2.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle backWallTetraedLeft(glm::vec3(8.0, 3.0, -3.0), glm::vec3(7.0, 3.0, 1.0), glm::vec3(8.0, 2.0, -3.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(backWallTetraedLeft);
-	Triangle backWallTetraedRight(glm::vec3(8.0, 3.0, -3.0), glm::vec3(8.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "metallic"));
+	Triangle backWallTetraedRight(glm::vec3(8.0, 3.0, -3.0), glm::vec3(8.0, 4.0, -3.0), glm::vec3(7.0, 3.0, 1.0), Material(ColorDBL(0.6, 0.4, 0.7), "lambertian"));
 	triangles_out.push_back(backWallTetraedRight);
 
 	return triangles_out;
