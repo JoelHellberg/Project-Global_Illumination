@@ -14,7 +14,6 @@ file(GLOB SOURCES
     "Scene.cpp"
     "Scene.h"
     "Camera.h"
-    "ColorDBL.cpp"
     "ColorDBL.h"
     "Rectangle.cpp"
     "Rectangle.h"
