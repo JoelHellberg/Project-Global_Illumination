@@ -26,78 +26,16 @@ public:
 	}
 
 	// Function that returns the material of the shape that a ray collides with
-	Material GetCollidingMaterial(Ray ray_in) {
-		glm::vec3 intersectionPoint = { 0, 0, 0 };
-		glm::vec3 normal = { 0,0,0 };
-		double distance = std::numeric_limits<double>::max();
-		Material mat = Material();
+	Material GetCollidingMaterial(Ray ray_in);
 
-		// Find the objects ("shape") that the ray collides with
-		int objectId = 0;
-		GetCollidingMaterialPolygon(ray_in, distance, intersectionPoint, mat, normal, objectId);
-		GetCollidingMaterialSphere(ray_in, distance, intersectionPoint, mat, normal, objectId);
+	void ProcessMaterialProperties(Ray ray_in, Material& mat_in);
 
-		// Apply lightning
-		if(!mat.checkIsLightSource()) {
-			ColorDBL intensity = ray_in.GetLightIntensity(normal, scene_lightsource, 5, intersectionPoint, scene_obstacles, scene_spheres, objectId);
-			mat.changeLuminance(intensity);
-			ColorDBL newColor = (mat.getColor() * intensity).ClampColors();
-			mat.changeColor(newColor);
-		}
+	void ProcessLightning(Ray ray_in, Material& mat_in);
 
-		// Calculate the color within a mirror
-		if (mat.checkIsReflective()) {
-			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-			Material newMat = GetCollidingMaterial(ray);
-			mat.changeColor(newMat.getColor() * 0.8);
-			// ray_in.PrintRayPath();
-		}
+	void ProcessMirrorReflection(Ray ray_in, Material& mat_in);
 
-		 // Calculate the color of a Lambertian material
-		if (mat.checkIsLambertian() || mat.checkIsMetallic()) {
+	void ProcessLambertianReflection(Ray ray_in, Material& mat_in);
 
-			double albedo = 0.8;
-			constexpr double bsrdf = 0.8 / glm::pi<float>();
-
-			double absorptionChance = 0.2;
-			float randomFactor = static_cast<float>(rand()) / RAND_MAX;
-
-			// Nuvarande mechanic så att en ray studsar MAX 5 gånger
-			if (randomFactor > absorptionChance && ray_in.getPathLength() <= maxDepth) {
-					Ray ray = ray_in.lambertianReflection(ray_in, normal, intersectionPoint);
-
-					double cosOmega = glm::dot(normal, ray.GetRayDirection()) / (glm::length(normal) * glm::length(ray.GetRayDirection()));
-					ColorDBL reflectiveColor(0.0, 0.0, 0.0);
-					for (int i = 0; i < noSamples; i++) {
-						Material newMat = GetCollidingMaterial(ray);
-						reflectiveColor += newMat.getColor() * bsrdf * cosOmega;  // Accumulate the color
-					}
-					// Average the colors after the loop
-					// reflectiveColor = reflectiveColor / noSamples;
-
-					ColorDBL newColor = mat.getColor() + reflectiveColor;
-					mat.changeColor(newColor);
-			}
-			else {
-				mat.changeColor(mat.getColor());
-			}
-		}
-
-		if (mat.checkIsMetallic()) {
-			Ray ray = ray_in.reflection(ray_in, normal, intersectionPoint);
-			Material newMat = GetCollidingMaterial(ray);
-			ColorDBL reflectedColor = newMat.getColor();  // Color from the reflection
-
-			ColorDBL baseColor = mat.getColor();  // Base color of the metal
-			// Use metallicFactor to blend between base color and reflection
-			float metallicFactor = 0.8;  // Degree of metallic appearance
-			ColorDBL newColor = baseColor * (1.0f - metallicFactor) + reflectedColor * metallicFactor;
-
-			mat.changeColor(newColor);
-		}
-
-		return mat;
-	}
 private:
 	std::vector<Shape*> scene_shapes;
 	std::vector<Shape*> scene_obstacles;
@@ -106,7 +44,11 @@ private:
 	double noSamples;
 	int maxDepth;
 
-	void GetCollidingMaterialPolygon(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal, int& objectId) {
+	glm::vec3 intersectionPoint = { 0, 0, 0 };
+	glm::vec3 normal = { 0,0,0 };
+	int objectId = 0;
+
+	void GetCollidingMaterialPolygon(Ray ray_in, double& distance, Material& mat) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
 		
@@ -115,11 +57,11 @@ private:
 			double dotProduct = glm::dot(shape->GetNormal(), rayDirection);
 			if (dotProduct < 0.0) {
 				if (shape->DoesCollide(rayStartPos, rayDirection)) {
-					glm::vec3 intersectionPoint = shape->GetIntersectionPoint(rayStartPos, rayDirection);
+					glm::vec3 objectIntersectionPoint = shape->GetIntersectionPoint(rayStartPos, rayDirection);
 					// Find the object that is closest to the ray's starting position
-					if (distance > glm::distance(rayStartPos, intersectionPoint)) {
-						finalIntersectionPoint = intersectionPoint;
-						distance = glm::distance(rayStartPos, intersectionPoint);
+					if (distance > glm::distance(rayStartPos, objectIntersectionPoint)) {
+						intersectionPoint = objectIntersectionPoint;
+						distance = glm::distance(rayStartPos, objectIntersectionPoint);
 						objectId = shape->getShapeID();
 						mat = shape->GetMaterial();
 						normal = shape->GetNormal();
@@ -129,17 +71,17 @@ private:
 		}
 	}
 
-	void GetCollidingMaterialSphere(Ray ray_in, double& distance, glm::vec3& finalIntersectionPoint, Material& mat, glm::vec3& normal, int& objectId) {
+	void GetCollidingMaterialSphere(Ray ray_in, double& distance, Material& mat) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
 		
 		for (Sphere& sphere : scene_spheres) {
 			if (sphere.DoesCollide(rayDirection, rayStartPos)) {
-				glm::vec3 intersectionPoint = sphere.GetIntersectionPoint(rayDirection, rayStartPos);
+				glm::vec3 objectIntersectionPoint = sphere.GetIntersectionPoint(rayDirection, rayStartPos);
 				// Find the object that is closest to the ray's starting position
-				if (distance > glm::distance(rayStartPos, intersectionPoint)) {
-					finalIntersectionPoint = intersectionPoint;
-					distance = glm::distance(rayStartPos, intersectionPoint);
+				if (distance > glm::distance(rayStartPos, objectIntersectionPoint)) {
+					intersectionPoint = objectIntersectionPoint;
+					distance = glm::distance(rayStartPos, objectIntersectionPoint);
 					objectId = sphere.getShapeID();
 					mat = sphere.GetMaterial();
 					normal = sphere.CalculateNormal(rayDirection, rayStartPos);
