@@ -16,6 +16,14 @@
 #include <limits>
 
 class CollisionHandler {
+	struct HitData {
+		bool hit = false;
+		glm::vec3 point{ 0 };
+		glm::vec3 normal{ 0 };
+		int objectId = -1;
+		Material material;
+	};
+
 public:
 
 	CollisionHandler(std::vector<Shape*> room_in, std::vector<Shape*> obstacles_in, std::vector<Sphere> spheres_in, Light lightSource, double noSamples_in, int maxDepth_in)
@@ -26,15 +34,15 @@ public:
 	}
 
 	// Function that returns the material of the shape that a ray collides with
-	Material GetCollidingMaterial(Ray ray_in);
+	Material GetCollidingMaterial(Ray& ray_in);
 
-	void ProcessMaterialProperties(Ray ray_in, Material& mat_in);
+	void ProcessMaterialProperties(Ray& ray_in, HitData& hit);
 
-	void ProcessLightning(Ray ray_in, Material& mat_in);
+	void ProcessLightning(Ray& ray_in, HitData& hit);
 
-	void ProcessMirrorReflection(Ray ray_in, Material& mat_in);
+	void ProcessMirrorReflection(Ray& ray_in, HitData& hit);
 
-	void ProcessLambertianReflection(Ray ray_in, Material& mat_in);
+	void ProcessLambertianReflection(Ray& ray_in, HitData& hit);
 
 private:
 	std::vector<Shape*> scene_shapes;
@@ -48,30 +56,32 @@ private:
 	glm::vec3 normal = { 0,0,0 };
 	int objectId = 0;
 
-	void GetCollidingMaterialPolygon(Ray ray_in, double& distance, Material& mat) {
+	void GetCollidingMaterialPolygon(
+		const Ray& ray_in, double& distance, HitData& hit) const
+	{
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
-		
-		// Find the objects ("shape") that the ray collides with
+
 		for (Shape* shape : scene_shapes) {
 			double dotProduct = glm::dot(shape->GetNormal(), rayDirection);
-			if (dotProduct < 0.0) {
-				if (shape->DoesCollide(rayStartPos, rayDirection)) {
-					glm::vec3 objectIntersectionPoint = shape->GetIntersectionPoint(rayStartPos, rayDirection);
-					// Find the object that is closest to the ray's starting position
-					if (distance > glm::distance(rayStartPos, objectIntersectionPoint)) {
-						intersectionPoint = objectIntersectionPoint;
-						distance = glm::distance(rayStartPos, objectIntersectionPoint);
-						objectId = shape->getShapeID();
-						mat = shape->GetMaterial();
-						normal = shape->GetNormal();
-					}
+			if (dotProduct < 0.0 && shape->DoesCollide(rayStartPos, rayDirection)) {
+				glm::vec3 objectIntersectionPoint = shape->GetIntersectionPoint(rayStartPos, rayDirection);
+				double dist = glm::distance(rayStartPos, objectIntersectionPoint);
+				if (dist < distance) {
+					distance = dist;
+					hit.hit = true;
+					hit.point = objectIntersectionPoint;
+					hit.objectId = shape->getShapeID();
+					hit.material = shape->GetMaterial();
+					hit.normal = shape->GetNormal();
 				}
 			}
 		}
 	}
 
-	void GetCollidingMaterialSphere(Ray ray_in, double& distance, Material& mat) {
+
+	void GetCollidingMaterialSphere(
+		const Ray& ray_in, double& distance, HitData& hit) {
 		glm::vec3 rayStartPos = ray_in.GetPs();
 		glm::vec3 rayDirection = ray_in.GetRayDirection();
 		
@@ -80,11 +90,11 @@ private:
 				glm::vec3 objectIntersectionPoint = sphere.GetIntersectionPoint(rayDirection, rayStartPos);
 				// Find the object that is closest to the ray's starting position
 				if (distance > glm::distance(rayStartPos, objectIntersectionPoint)) {
-					intersectionPoint = objectIntersectionPoint;
+					hit.point = objectIntersectionPoint;
 					distance = glm::distance(rayStartPos, objectIntersectionPoint);
-					objectId = sphere.getShapeID();
-					mat = sphere.GetMaterial();
-					normal = sphere.CalculateNormal(rayDirection, rayStartPos);
+					hit.objectId = sphere.getShapeID();
+					hit.material = sphere.GetMaterial();
+					hit.normal = sphere.CalculateNormal(rayDirection, rayStartPos);
 				}
 			}
 		}

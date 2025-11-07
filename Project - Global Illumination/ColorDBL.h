@@ -30,8 +30,11 @@ public:
 	};
 
 	static void displayColor(std::vector<double> n){
+		double rValue = n[0] * 255.0;
+		double gValue = n[1] * 255.0;
+		double bValue = n[2] * 255.0;
 
-		std::cout << n[0] * 255.0 << " " << n[1] * 255.0 << " " << n[2] * 255.0 << "\n";
+		std::cout << rValue << " " << gValue << " " << bValue << "\n";
 	}
 
 	ColorDBL MultiplyColor(ColorDBL color1) {

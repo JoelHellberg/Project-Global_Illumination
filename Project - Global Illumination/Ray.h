@@ -44,17 +44,17 @@ public:
 
 	Ray lambertianReflection(Ray ray_in, glm::vec3 N, glm::vec3 intersectionPoint);
 
-	glm::vec3 GetRayDirection() {
+	glm::vec3 GetRayDirection() const {
 		return rayDirection;
 	}
 
-	glm::vec3 GetPs() {
+	glm::vec3 GetPs() const {
 			return ps;
 	}
 
 	void AddRayToList(Ray* newRay);
 
-	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, double raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in, int shapeId);
+	ColorDBL GetLightIntensity(glm::vec3 normal, Light lightSource, double raysAmount, glm::vec3 intersectionPoint, std::vector<Shape*> shapes_in, std::vector<Sphere> spheres_in, int shapeId) const;
 
 	void PrintRayPath() {
 		Ray* ptr = this;

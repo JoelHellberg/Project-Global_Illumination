@@ -22,7 +22,7 @@
 
 
 //Define rectangles in scene
-std::vector<Rectangle> defineRectangles() {
+static std::vector<Rectangle> defineRectangles() {
 	// Define objects
 	std::vector<Rectangle> rectangles_out;
 
@@ -53,7 +53,7 @@ std::vector<Rectangle> defineRectangles() {
 }
 
 //Define triangles in scene
-std::vector<Triangle> defineTriangles() {
+static std::vector<Triangle> defineTriangles() {
 	std::vector<Triangle> triangles_out;
 
 	// Define the floor (in front of the camera) as two orthogonal triangles
@@ -83,7 +83,7 @@ std::vector<Triangle> defineTriangles() {
 	return triangles_out;
 }
 
-std::vector<Rectangle> defineObstaclesRectangles() {
+static std::vector<Rectangle> defineObstaclesRectangles() {
 	std::vector<Rectangle> rectangles_out;
 
 	// Floor of Tetraed
@@ -93,7 +93,7 @@ std::vector<Rectangle> defineObstaclesRectangles() {
 	return rectangles_out;
 }
 
-std::vector<Triangle> defineObstaclesTriangles() {
+static std::vector<Triangle> defineObstaclesTriangles() {
 	std::vector<Triangle> triangles_out;
 
 	// Triangles of Tetraed
@@ -123,7 +123,7 @@ std::vector<Triangle> defineObstaclesTriangles() {
 	return triangles_out;
 }
 
-std::vector<Sphere> defineSphere(){
+static std::vector<Sphere> defineSphere(){
 
 	std::vector<Sphere> sphere_out;
 

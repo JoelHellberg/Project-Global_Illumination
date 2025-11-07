@@ -11,6 +11,10 @@
 #include <mutex>
 #include <concurrent_vector.h> // Include for concurrency::parallel_for, if needed
 
+#include <mutex>
+
+static std::mutex fakeMutex;
+
 
 //Print all color in a column
 void printColor(std::vector<double> colorValues_in) {
@@ -56,9 +60,9 @@ int main()
 
 
 	// Dimension of the output image
-	size_t dimensions = 800.0;
+	size_t dimensions = 200.0;
 	// Factors that influence the detail of sharpness of the render
-	double noSamples = 64.0;
+	double noSamples = 100.0;
 	int maxDepth = 5;
 
 	// Define the Camera
@@ -87,12 +91,12 @@ int main()
 	concurrency::parallel_for(size_t(0), dimensions, [&](size_t j) {
 		for (size_t i = 0; i < dimensions; i++) {
 			// Check CPU usage and pause if above 80%
-			CpuManagement::WaitForCpuBelowThreshold(80.0);
+			// CpuManagement::WaitForCpuBelowThreshold(80.0);
 
 			Ray ray = myCamera.GetRay(i, j);
 
 			ColorDBL leanColor(0.0, 0.0, 0.0);
-			for (int i = 0; i < noSamples; i++) {
+			for (int s = 0; s < noSamples; s++) {
 				Material mat = myCollisionHandler.GetCollidingMaterial(ray);
 				leanColor += mat.getColor();  // Accumulate the color
 			}
@@ -105,7 +109,6 @@ int main()
 
 			// Clamp the colors
 			leanColor = leanColor.ClampColors();
-
 
 			// Calculate 1D index based on 2D coordinates (i, j)
 			size_t index = j * dimensions + i;
