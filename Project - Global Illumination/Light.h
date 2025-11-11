@@ -16,18 +16,16 @@ class Light : public Rectangle {
 public:
 
 	Light(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4, Material mat) {
-		srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
-
 		coordinates.push_back(point1);
 		coordinates.push_back(point2);
 		coordinates.push_back(point3);
 		coordinates.push_back(point4);
 		rectangleMaterial = mat;
 
-		Area = glm::length(point2 - point1) * glm::length(point3 - point2);
+		Area = glm::length(glm::cross(point2 - point1, point4 - point1));
 
 		//normal = glm::normalize(glm::cross((point2 - point1), (point3 - point1)));
-		normal = glm::normalize(glm::cross((point4 - point3), (point1 - point4)));
+		normal = glm::normalize(glm::cross((point1 - point4), (point4 - point3)));
 	};
 
 	double GetArea() {

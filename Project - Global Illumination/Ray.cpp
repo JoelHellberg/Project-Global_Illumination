@@ -23,7 +23,7 @@ Ray Ray::reflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersection
 	glm::vec3 d_o = di - 2.0f * glm::dot(di, surface_normal) * surface_normal;
 
 	Ray* reflected_ray = new Ray(d_o, intersectionPoint);
-	AddRayToList(reflected_ray);
+	//AddRayToList(reflected_ray);
 	// Material new_mat = mat;
 
 	return *reflected_ray;
@@ -32,34 +32,36 @@ Ray Ray::reflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersection
 }
 
 Ray Ray::lambertianReflection(Ray ray_in, glm::vec3 surface_normal, glm::vec3 intersectionPoint) {
-	// Step 1: Generate random angles for azimuthal and polar within ±90 degrees (in radians)
-	float max = M_PI / 2.0;
-	float min = -max;
-    float theta = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min))); // Azimuthal angle
-    float phi = min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));   // Polar angle
+	// Thread-safe random generator
+	static thread_local std::mt19937 gen(std::random_device{}());
+	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
-    // Step 2: Convert spherical coordinates to Cartesian coordinates in the local frame
-    float x = cos(phi) * sin(theta);
-    float y = sin(phi);
-    float z = cos(phi) * cos(theta);
+	// Cosine-weighted hemisphere sampling
+	float r1 = dist(gen);
+	float r2 = dist(gen);
 
-    // Step 3: Create an orthonormal basis from the normal
-    glm::vec3 tangent, bitangent;
-	// Pick an arbitrary vector to create the basis
-	glm::vec3 up = std::fabs(surface_normal.z) < 0.999 ? glm::vec3(0.0, 0.0, 1.0) : glm::vec3(1.0, 0.0, 0.0);
-	tangent = glm::normalize(glm::cross(up, surface_normal));
-	bitangent = glm::normalize(glm::cross(surface_normal, tangent));
+	float theta = acosf(sqrtf(1.0f - r1));  // polar angle
+	float phi = 2.0f * M_PI * r2;           // azimuthal angle
 
-    // Step 4: Transform local direction to world space
-	glm::vec3 d_o = glm::vec3(x * tangent + y * bitangent + z * surface_normal);
+	// Local coordinates (cosine-weighted hemisphere)
+	float x = sinf(theta) * cosf(phi);
+	float y = sinf(theta) * sinf(phi);
+	float z = cosf(theta);
 
-	Ray* reflected_ray = new Ray(d_o, intersectionPoint);
-	AddRayToList(reflected_ray);
-	// Material new_mat = mat;
+	// Build orthonormal basis around the normal
+	glm::vec3 up = (fabs(surface_normal.z) < 0.999f) ? glm::vec3(0.0, 0.0, 1.0) : glm::vec3(1.0, 0.0, 0.0);
+	glm::vec3 tangent = glm::normalize(glm::cross(up, surface_normal));
+	glm::vec3 bitangent = glm::normalize(glm::cross(surface_normal, tangent));
 
-	return *reflected_ray;
+	// Transform from local to world space
+	glm::vec3 d_o = glm::normalize(x * tangent + y * bitangent + z * surface_normal);
 
+	// Offset origin slightly to avoid self-intersection
+	glm::vec3 origin = intersectionPoint + surface_normal * 1e-4f;
+
+	return Ray(d_o, origin);
 }
+
 
 void Ray::AddRayToList(Ray* newRay) {
 	newRay->head = this->head;

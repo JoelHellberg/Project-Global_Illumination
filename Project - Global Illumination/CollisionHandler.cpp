@@ -23,9 +23,13 @@ Material CollisionHandler::GetCollidingMaterial(Ray& ray_in) {
 
 
 void CollisionHandler::ProcessMaterialProperties(Ray& ray_in, HitData& hit) {
-	if (!hit.material.checkIsLightSource()) {
+	if (hit.material.checkIsLightSource()) {
+		return;
+	}
+	else {
 		ProcessLightning(ray_in, hit);
 	}
+
 	if (hit.material.checkIsReflective()) {
 		ProcessMirrorReflection(ray_in, hit);
 	}
@@ -57,7 +61,11 @@ void CollisionHandler::ProcessLambertianReflection(Ray& ray_in, HitData& hit) {
 	constexpr double invPi = 1.0 / glm::pi<double>();
 
 	double absorptionChance = 0.2;
-	float randomFactor = static_cast<float>(rand()) / RAND_MAX;
+
+	static thread_local std::mt19937 gen(std::random_device{}());
+	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+	float randomFactor = dist(gen);
+
 
 	if ((randomFactor > absorptionChance && ray_in.getPathLength() <= maxDepth)) {
 		// Generate a random reflected ray over hemisphere

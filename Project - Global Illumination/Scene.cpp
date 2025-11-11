@@ -12,6 +12,7 @@
 #include <concurrent_vector.h> // Include for concurrency::parallel_for, if needed
 
 #include <mutex>
+#include <atomic>
 
 static std::mutex fakeMutex;
 
@@ -21,6 +22,20 @@ void printColor(std::vector<double> colorValues_in) {
 
 	ColorDBL::displayColor(colorValues_in);
 }
+
+void updateProgressbar(std::atomic<size_t>& pixelsDone, size_t dimensions) {
+	size_t done = pixelsDone.fetch_add(1) + 1;  // Atomically increment and get the new value
+
+	if (done % 1000 == 0) {
+		size_t totalPixels = dimensions * dimensions;
+		double percent = (100.0 * done) / totalPixels;
+
+		std::lock_guard<std::mutex> lock(fakeMutex); // prevent interleaved prints
+		std::cerr << "\rProgress: " << std::fixed << std::setprecision(1)
+			<< percent << "% (" << done << "/" << totalPixels << ")" << std::flush;
+	}
+}
+
 
 int main()
 {
@@ -88,6 +103,8 @@ int main()
 		}
 	}
 
+	std::atomic<size_t> pixelsDone(0);
+
 	concurrency::parallel_for(size_t(0), dimensions, [&](size_t j) {
 		for (size_t i = 0; i < dimensions; i++) {
 			// Check CPU usage and pause if above 80%
@@ -115,6 +132,8 @@ int main()
 
 			// Ensure safe access to pixelColors
 			pixelColors[index] = leanColor.getColor();
+
+			updateProgressbar(pixelsDone, dimensions);
 		}
 		});
 
