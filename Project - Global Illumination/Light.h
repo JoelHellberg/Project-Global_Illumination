@@ -25,7 +25,7 @@ public:
 		Area = glm::length(glm::cross(point2 - point1, point4 - point1));
 
 		//normal = glm::normalize(glm::cross((point2 - point1), (point3 - point1)));
-		normal = glm::normalize(glm::cross((point1 - point4), (point4 - point3)));
+		normal = glm::normalize(glm::cross((point4 - point3), (point1 - point4)));
 	};
 
 	double GetArea() {
